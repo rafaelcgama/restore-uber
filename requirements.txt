@@ -1,0 +1,5 @@
+requests
+jupyterlab
+lxml
+bs4
+selenium
