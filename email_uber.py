@@ -9,8 +9,8 @@ from email.mime.multipart import MIMEMultipart
 
 logger = logging.getLogger(__name__)
 
-MY_ADDRESS = os.getenv('MY_ADDRESS')
-PASSWORD = os.getenv('PASSWORD')
+MY_USERNAME = os.getenv('USERNAME_EMAIL')
+PASSWORD = os.getenv('PASSWORD_EMAIL')
 time_gap = int(os.getenv('DELAY'))
 batch_size = int(os.getenv('BATCH_SIZE'))
 max_emails = int(os.getenv('EMAIL_TARGET'))
@@ -51,7 +51,7 @@ class Please_Help():
         s = smtplib.SMTP(host='smtp.gmail.com', port=587)
         s.starttls()
 
-        s.login(MY_ADDRESS, PASSWORD)
+        s.login(MY_USERNAME, PASSWORD)
 
         # For each contact, send the email:
         batch_count = 1

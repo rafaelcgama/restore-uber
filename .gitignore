@@ -34,3 +34,6 @@ nosetests.xml
 #jupyter files
 /.ipynb_checkpoints/
 *.ipynb
+
+#json
+*.json
