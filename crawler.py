@@ -19,10 +19,10 @@ MAX_TRIES = int(os.getenv('MAX_TRIES'))
 class LinkedInCrawler():
     def __init__(self):
         self.driver = init_driver()
-        self.url = 'https://www.linkedin.com/home'
+        self.url = 'https://www.linkedin.com/login?fromSignIn=true'
         self.wait = WebDriverWait(self.driver, 120)
         self.company = 'Uber'
-        self.cities = ['San Francisco']# , 'São Paulo']
+        self.cities = ['San Francisco']  # , 'São Paulo']
         self.xpaths = {
             'locations': {
                 'filter': './/button[contains(@aria-label,"Locations filter")]',
@@ -30,15 +30,20 @@ class LinkedInCrawler():
                 'selection': './/div[@role="listbox"]//*[contains(text(), "{}")]',
                 'apply_button': './/fieldset[contains(@class,"geoRegion container")]//button[@data-control-name="filter_pill_apply"]'
             },
-            'company':{
+            'company': {
                 'filter': './/button[contains(@aria-label,"Current companies filter")]',
                 'input_box': './/input[@placeholder="Add a current company"]',
                 'selection': './/div[@role="listbox"]//*[contains(text(), "{}")]',
                 'apply_button': './/form[contains(@aria-label,"Current companies")]//button[@data-control-name="filter_pill_apply"]'
+            },
+            'extract_data': {
+                'next_button': './/button[@aria-label="Next"]',
+                'employee_combox': './/ul[contains(@class,"search-results")]/li[not(contains(@class, "cross-promo"))]',
+                'name': './/span[@class="name actor-name"]',
+                'position': './/p[contains(@class,"t-black t-normal search-result__truncate")]'
+
             }
         }
-
-
 
     def login(self, tries=0):
         '''
@@ -47,13 +52,13 @@ class LinkedInCrawler():
         '''
         try:
             logger.info(f'Attempting to login to {self.url}')
-            self.driver.find_element_by_xpath('.//input[@name="session_key"]').clear()
-            self.driver.find_element_by_xpath('.//input[@name="session_key"]').send_keys(MY_USERNAME)
-            self.driver.find_element_by_xpath('.//input[@name="session_password"]').clear()
-            self.driver.find_element_by_xpath('.//input[@name="session_password"]').send_keys(PASSWORD)
-            self.driver.find_element_by_xpath('.//button[@class="sign-in-form__submit-btn"]').click()
+            self.driver.find_element_by_xpath('.//input[@id="username"]').clear()
+            self.driver.find_element_by_xpath('.//input[@id="username"]').send_keys(MY_USERNAME)
+            self.driver.find_element_by_xpath('.//input[@id="password"]').clear()
+            self.driver.find_element_by_xpath('.//input[@id="password"]').send_keys(PASSWORD)
+            self.driver.find_element_by_xpath('.//button[@type="submit"]').click()
             sleep(2)
-            logger.info('')
+            logger.info('Log in was successful')
 
         except Exception as e:
             logger.error('Login attempt failed', exc_info=True)
@@ -62,7 +67,6 @@ class LinkedInCrawler():
                 tries += 1
                 return self.login()
             raise Exception(f'Failure to login, {e}')
-
 
     def wait_for_element(self, xpath):
         self.wait.until(EC.presence_of_element_located((By.XPATH, xpath)))
@@ -81,15 +85,14 @@ class LinkedInCrawler():
         self.driver.find_element_by_xpath(self.xpaths['locations']['input_box']).clear()
         self.driver.find_element_by_xpath(self.xpaths['locations']['input_box']).send_keys(city)
 
-        sleep(1)
+        sleep(randint(1, 2))
         self.driver.find_element_by_xpath(self.xpaths['locations']['selection'].format(city)).click()
-        sleep(1)
+        sleep(randint(1, 2))
         self.wait_for_element(self.xpaths['locations']['apply_button'])
         self.driver.find_element_by_xpath(self.xpaths['locations']['apply_button']).click()
-        sleep(1)
+        sleep(randint(1, 2))
 
         logger.info('City selection: FINISHED')
-
 
     def add_company(self, company):
         '''
@@ -107,39 +110,40 @@ class LinkedInCrawler():
         self.driver.find_element_by_xpath(self.xpaths['company']['input_box']).send_keys(company)
 
         # self.wait_for_element(self.xpaths['company']['selection'])
-        sleep(1)
+        sleep(randint(1, 2))
         self.driver.find_element_by_xpath(self.xpaths['company']['selection'].format(company)).click()
-        sleep(1)
+        sleep(randint(1, 2))
         self.wait_for_element(self.xpaths['company']['apply_button'])
         self.driver.find_element_by_xpath(self.xpaths['company']['apply_button']).click()
-        sleep(1)
+        sleep(randint(1, 2))
+        self.wait_for_element(self.xpaths['extract_data']['next_button'])
+        self.driver.execute_script("window.scrollTo(0, document.documentElement.scrollHeight);")
+        sleep(randint(1, 2))
 
         logger.info('Company selection: FINISHED')
 
         # WebDriverWait(driver, 120).until(EC.presence_of_element_located((By.ID, 'pageBody')))
 
-    def extract_page(self, employee_list , total, tries=0):
+    def extract_page(self, employee_list, total, tries=0):
         '''
         Extract employee info of one page
         :return: A list
         '''
         try:
             logger.info(f'Employee data from page number {total}: STARTED')
-            next_button_xpath = './/button[@aria-label="Next"]'
-            employee_combox_xpath = './/ul[contains(@class,"search-results")]/li'
-            employee_combox = self.driver.find_elements_by_xpath(employee_combox_xpath)
+            employee_combox = self.driver.find_elements_by_xpath(self.xpaths['extract_data']['employee_combox'])
             for employee in employee_combox:
-                name = employee.find_element_by_xpath('.//span[@class="name actor-name"]').text
-                position = employee.find_element_by_xpath(
-                    './/p[contains(@class,"t-black t-normal search-result__truncate")]').text
+                name = employee.find_element_by_xpath(self.xpaths['extract_data']['name']).text
+                position = employee.find_element_by_xpath(self.xpaths['extract_data']['position']).text
                 employee_list.append({
                     'name': name,
                     'position': position
                 })
-            self.driver.find_element_by_xpath(next_button_xpath).click()
-            self.wait_for_element(employee_combox_xpath)
+            self.driver.find_element_by_xpath(self.xpaths['extract_data']['next_button']).click()
+            self.wait_for_element(self.xpaths['locations']['filter'])
+            sleep(randint(1, 2))
             self.driver.execute_script("window.scrollTo(0, document.documentElement.scrollHeight);")
-            self.wait_for_element(next_button_xpath)
+            self.wait_for_element(self.xpaths['extract_data']['next_button'])
             logger.info(f'Employee data from page number {total}: COMPLETED')
 
         except Exception as e:
@@ -151,38 +155,32 @@ class LinkedInCrawler():
             else:
                 logger.error(f'Failed to load an extract info from page number {total}')
 
-
     def get_employees_info(self):
         '''
         Iterate through employees and collect name and position
         :return: A list() of dict() containing an employee name and position
         '''
         logger.info('Employee data extraction: STARTED')
-        self.driver.execute_script("window.scrollTo(0, document.documentElement.scrollHeight);")
         employee_info = []
-        next_button_xpath = './/button[@aria-label="Next"]'
-        self.wait_for_element(next_button_xpath)
 
         page_count = 1
-
-        # while self.driver.find_element_by_xpath(next_button_xpath) is not None:
-        #     self.extract_page(employee_info, total)
-        #     total += 1
+        while self.driver.find_element_by_xpath(self.xpaths['extract_data']['next_button']) is not None:
+            self.extract_page(employee_info, page_count)
+            page_count += 1
+            sleep(randint(1, 2))
 
         logger.info('Employee data extraction: FINISHED')
         return employee_info
 
-
     def get_data(self, tries=0):
         try:
             self.driver.get(self.url)
-            sleep(2)
+            sleep(3)
 
             self.login()
 
             data = []
             for city in self.cities:
-
                 # Go to people search page
                 self.driver.find_element_by_xpath('.//div[@id="global-nav-typeahead"]').click()
                 sleep(1)
@@ -207,6 +205,7 @@ class LinkedInCrawler():
             else:
                 logger.error('Failure to complete data collection')
 
-if __name__ == '__main__':
-    crawler = LinkedInCrawler()
-    data = crawler.get_data()
+
+# if __name__ == '__main__':
+#     crawler = LinkedInCrawler()
+#     data = crawler.get_data()

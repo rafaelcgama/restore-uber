@@ -95,8 +95,7 @@ class Please_Help():
                         break
             else:
                 # Wait 15m before sending another batch
-                logger.info('Batch number {} completed. Waiting {}m until next batch is sent.'.format(batch_count,
-                                                                                                      time_gap / 60))
+                logger.info('Batch number {} completed. Waiting {}m until next batch is sent.'.format(batch_count, time_gap / 60))
                 batch_count += 1
                 sleep(time_gap)
 

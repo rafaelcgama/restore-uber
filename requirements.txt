@@ -1,5 +1,5 @@
-requests
 jupyterlab
-lxml
-bs4
+jupyter
 selenium
+python-dotenv
+
