@@ -1,4 +1,4 @@
-from crawler import  LinkedInCrawler
+from crawler_linkedin import  LinkedInCrawler
 from send_emails import Please_Help
 
 

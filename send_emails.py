@@ -7,7 +7,7 @@ from string import Template
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 
-logger = logging.getLogger(__name__)
+
 
 MY_USERNAME = os.getenv('USERNAME_EMAIL')
 PASSWORD = os.getenv('PASSWORD_EMAIL')
@@ -23,14 +23,14 @@ class Please_Help():
 
     @staticmethod
     def get_contacts(file_list):
-        logger.info('Started uploading contacts from files')
+        self.logger.info('Started uploading contacts from files')
         all_contacts = []
         for filename in file_list:
             with open(filename, mode='r', encoding='utf-8') as contacts_file:
                 region = json.load(contacts_file)
             all_contacts += region
 
-        logger.info('Contacts upload completed')
+        self.logger.info('Contacts upload completed')
         return all_contacts
 
 
@@ -47,7 +47,7 @@ class Please_Help():
         message_template = self.read_template('uber.txt')
 
         # set up the SMTP server
-        logger.info('Connecting to email server and logging in')
+        self.logger.info('Connecting to email server and logging in')
         s = smtplib.SMTP(host='smtp.gmail.com', port=587)
         s.starttls()
 
@@ -58,7 +58,7 @@ class Please_Help():
         email_count = 1
         for contact in contacts:
             for key, value in contact.items():
-                logger.info('Sending email {} from number {}'.format(email_count, batch_count))
+                self.logger.info('Sending email {} from number {}'.format(email_count, batch_count))
 
                 if email_count % batch_size != 0:
                     # format person's name based on what the different emails format
@@ -82,25 +82,25 @@ class Please_Help():
                     msg.attach(MIMEText(message, 'plain'))
 
                     # Send the message via the server set up earlier.
-                    logger.info("Emailing {}".format(contact[key]))
+                    self.logger.info("Emailing {}".format(contact[key]))
                     s.send_message(msg)
                     del msg
 
-                    logger.info(
+                    self.logger.info(
                         'Email number {} from batch number {} successfully sent'.format(email_count, batch_count))
                     email_count += 1
                     sleep(5)
                     if email_count == max_emails:
-                        logger.info('Daily email target achieved')
+                        self.logger.info('Daily email target achieved')
                         break
             else:
                 # Wait 15m before sending another batch
-                logger.info('Batch number {} completed. Waiting {}m until next batch is sent.'.format(batch_count, time_gap / 60))
+                self.logger.info('Batch number {} completed. Waiting {}m until next batch is sent.'.format(batch_count, time_gap / 60))
                 batch_count += 1
                 sleep(time_gap)
 
         # Terminate the SMTP session and close the connection
-        logger.info('Daily email target reached. Closing server connection')
+        self.logger.info('Daily email target reached. Closing server connection')
         s.quit()
 
 
