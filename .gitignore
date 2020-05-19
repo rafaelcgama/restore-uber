@@ -4,7 +4,11 @@
 *.vscode
 **.vscode/**
 
-#Packages
+*.pyc
+
+
+**.vscode/**
+# Packages
 *.egg
 *.egg-info
 build
@@ -29,7 +33,7 @@ pip-log.txt
 nosetests.xml
 
 # virtual environment variables
-*.env
+#*.env
 
 #jupyter files
 /.ipynb_checkpoints/

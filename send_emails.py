@@ -7,8 +7,6 @@ from string import Template
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 
-
-
 MY_USERNAME = os.getenv('USERNAME_EMAIL')
 PASSWORD = os.getenv('PASSWORD_EMAIL')
 time_gap = int(os.getenv('DELAY'))
@@ -19,7 +17,12 @@ max_emails = int(os.getenv('EMAIL_TARGET'))
 class Please_Help():
     def __init__(self, data_list):
         self.data = data_list
-
+        self.logger = logging.getLogger(__name__)
+        self.logger.level = 20
+        self.MAX_TRIES = 5
+        logging.basicConfig(
+            format='[%(asctime)s] {%(filename)s:%(lineno)d} %(levelname)s: %(message)s',
+            datefmt='%d/%m/%Y %I:%M:%S %p', level=20)
 
     @staticmethod
     def get_contacts(file_list):
@@ -33,14 +36,12 @@ class Please_Help():
         self.logger.info('Contacts upload completed')
         return all_contacts
 
-
     @staticmethod
     def read_template(filename):
         with open(filename, 'r', encoding='utf-8') as template_file:
             template_file_content = template_file.read()
 
         return Template(template_file_content)
-
 
     def help(self):
         contacts = self.get_contacts(self.data)  # read contacts
@@ -95,7 +96,8 @@ class Please_Help():
                         break
             else:
                 # Wait 15m before sending another batch
-                self.logger.info('Batch number {} completed. Waiting {}m until next batch is sent.'.format(batch_count, time_gap / 60))
+                self.logger.info('Batch number {} completed. Waiting {}m until next batch is sent.'.format(batch_count,
+                                                                                                           time_gap / 60))
                 batch_count += 1
                 sleep(time_gap)
 

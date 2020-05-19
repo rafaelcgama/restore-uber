@@ -43,12 +43,20 @@ class DriverFuncions():
         sleep(randint(1, 2))
 
     def scroll_random(self):
-        self.scroll_up(randint(-8, -5) * 100)
-        sleep(randint(1, 2))
-        self.scroll_down(randint(2, 4) * 100)
-        sleep(randint(1, 2))
-        self.scroll_up(randint(-2, -1) * 100)
-        sleep(randint(1, 2))
+        if self.page % 8 == 0:
+            self.scroll_down(randint(5, 8) * 100)
+            sleep(randint(1, 2))
+            self.scroll_up(randint(-2, -4) * 100)
+            sleep(randint(1, 2))
+            self.scroll_down(randint(1, 2) * 100)
+            sleep(randint(1, 2))
+        else:
+            self.scroll_up(randint(-8, -5) * 100)
+            sleep(randint(1, 2))
+            self.scroll_down(randint(2, 4) * 100)
+            sleep(randint(1, 2))
+            self.scroll_up(randint(-2, -1) * 100)
+            sleep(randint(1, 2))
 
     def go_back_page(self):
         self.driver.execute_script("window.history.go(-1)")
@@ -79,5 +87,8 @@ class DriverFuncions():
         else:
             return element.find_element_by_xpath(xpath)
 
-    def get_attribute(self, element, xpath, attrib):
-        return element.find_element(xpath).get_attribute(attrib)
+    def get_attribute(self, xpath, attrib, element=None):
+        if element is None:
+            return self.driver.find_element_by_xpath(xpath).get_attribute(attrib)
+        else:
+            return element.find_element_by_xpath(xpath).get_attribute(attrib)
