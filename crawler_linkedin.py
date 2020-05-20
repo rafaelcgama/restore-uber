@@ -1,10 +1,11 @@
 import sys
 from os import getcwd
-from utils import write_file, update_filename
 from os.path import join
-from time import sleep, time
 from random import randint
+from time import sleep, time
+from unidecode import unidecode
 from crawler_base import Crawler
+from utils import write_file, update_filename
 
 
 class LinkedInCrawler(Crawler):
@@ -19,7 +20,7 @@ class LinkedInCrawler(Crawler):
         self.last_saved_file = ''
         self.url_login = 'https://www.linkedin.com/login?fromSignIn=true'
         self.companies = ['Uber']
-        self.cities = ['San Francisco']  # , 'São Paulo']
+        self.cities = ['São Paulo', 'San Francisco']
         self.xpaths = {
             'location': {
                 'filter': './/button[contains(@aria-label,"Locations filter")]',
@@ -43,10 +44,9 @@ class LinkedInCrawler(Crawler):
         }
 
     def create_filepath(self, city, company):
-        filename = f'data_{city}_{company}_page_{self.page}.json'
+        filename = f'data_{unidecode(city)}_{unidecode(company)}_page_{self.page}.json'
         file_path = join(getcwd(), 'data', filename)
         return file_path
-
 
     def save_data(self):
         city = self.city.replace(' ', '_').lower()
@@ -84,6 +84,7 @@ class LinkedInCrawler(Crawler):
         self.click(self.xpaths['location']['apply_button'])
         sleep(randint(1, 2))
 
+        self.logger.info(f"City: {city}")
         self.logger.info('City selection: FINISHED')
 
     def add_company(self, company):
@@ -105,6 +106,7 @@ class LinkedInCrawler(Crawler):
         self.click(self.xpaths['company']['apply_button'])
         sleep(randint(1, 2))
 
+        self.logger.info(f"Company: {company}")
         self.logger.info('Company selection: FINISHED')
 
     def click_random_profiles(self, employee_combox):
@@ -121,7 +123,7 @@ class LinkedInCrawler(Crawler):
 
         for url in urls:
             self.driver.get(url)
-            sleep(randint(1, 3))
+            sleep(randint(3, 4))
             self.scroll_random()
             self.go_back_page()
 

@@ -1,5 +1,4 @@
 import os
-import json
 import logging
 import smtplib
 from time import sleep
@@ -14,9 +13,8 @@ batch_size = int(os.getenv('BATCH_SIZE'))
 max_emails = int(os.getenv('EMAIL_TARGET'))
 
 
-class Please_Help():
-    def __init__(self, data_list):
-        self.data = data_list
+class EmailSender:
+    def __init__(self):
         self.logger = logging.getLogger(__name__)
         self.logger.level = 20
         self.MAX_TRIES = 5
@@ -24,17 +22,6 @@ class Please_Help():
             format='[%(asctime)s] {%(filename)s:%(lineno)d} %(levelname)s: %(message)s',
             datefmt='%d/%m/%Y %I:%M:%S %p', level=20)
 
-    @staticmethod
-    def get_contacts(file_list):
-        self.logger.info('Started uploading contacts from files')
-        all_contacts = []
-        for filename in file_list:
-            with open(filename, mode='r', encoding='utf-8') as contacts_file:
-                region = json.load(contacts_file)
-            all_contacts += region
-
-        self.logger.info('Contacts upload completed')
-        return all_contacts
 
     @staticmethod
     def read_template(filename):
@@ -43,8 +30,7 @@ class Please_Help():
 
         return Template(template_file_content)
 
-    def help(self):
-        contacts = self.get_contacts(self.data)  # read contacts
+    def send_email(self, email_list): # read contacts
         message_template = self.read_template('uber.txt')
 
         # set up the SMTP server
@@ -57,7 +43,7 @@ class Please_Help():
         # For each contact, send the email:
         batch_count = 1
         email_count = 1
-        for contact in contacts:
+        for contact in email_list:
             for key, value in contact.items():
                 self.logger.info('Sending email {} from number {}'.format(email_count, batch_count))
 
@@ -109,5 +95,5 @@ class Please_Help():
 if __name__ == '__main__':
     # data_list = ['emails_sf.json', 'emails_sp.json']
     data_list = ['test.json']
-    help = Please_Help(data_list)
-    help.help()
+    email_sender = EmailSender()
+    email_sender.send_email(data_list)

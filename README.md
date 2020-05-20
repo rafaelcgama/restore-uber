@@ -1,15 +1,10 @@
-<h1 style="text-align: center;"> <span><b>Operation Restore Account</b></span></h1>
+<h1 style="text-align: center;"> <span><b>Operation Restore Uber Account</b></span></h1>
+<h4 style="text-align: center;"> <span><b>Disclamer: this crawler was operational as of 05/18/2020</b></span></h4>
 
 
 
-<img src="./images/uber_disabled.jpeg" class="center">
-<style>
-img {
-  display: block;
-  margin-left: auto;
-  margin-right: auto;
-}
-</style>
+
+![](/images/uber_disabled.jpeg)
 
 
 <h2 style="text-align: center;"> <span><i>Objective</i></span></h2>
@@ -47,13 +42,13 @@ Now I that knew Uber's email formats, all I needed was to get a list of employee
 
 LinkedIn proved to be a worthy adversary and a particularly hard site to crawl. After analyzing the task, I came up with the following set challenges and solutions:
 
-* ### LinkedIn requires Javascript to render content on the page
+* #### LinkedIn requires Javascript to render content on the page:
     I am familiar with both [selenium](https://selenium-python.readthedocs.io/) and [requests](https://requests.readthedocs.io/en/master/) but because of this peculiarity I couldn't crawl using requests so I had to settle for **selenium**
 
-* ### Linkedin server reject a large series of requests from the same IP address in a given time period and suspends your ability to search for a few days. Also, the page rendering time would greatly vary between requests
+* #### Linkedin server reject a large series of requests from the same IP address in a given time period and suspends your ability to search for a few days. Also, the page rendering time would greatly vary between requests:
     To avoid using long sleep times, I tried to use Selenium's Wait module to dynamically wait for the page to load but had little success. The code was unstable and breaking all the time so I was forced to increase the sleep times to solve both problems. 
 
-* ### LinkedIn is on the look out for scraper bot behavior patters
+* #### LinkedIn is on the look out for scraper bot behavior patters:
     To decrease my chances of being flagged, I created and applied a set of functions that try to simulate human behavior by scrolling up and down and randomly clicking on profiles.
     
 
