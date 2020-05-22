@@ -17,7 +17,7 @@ The goal of this project is to create a crawler to scrap LinkedIn for all Uber e
 
 The idea for this project emerged when my Uber account was disabled, and after a long time trying to restore it, I became very frustrated and finally gave up trying fix it via customer service. If you are interested in knowing the whole story you should read the [email](uber.txt) I sent them. Long story short, my account started to get blocked for no reason. Every time I would reach their customer service and they would always say that it was just a glitch, and would promptly reactivate it. This went on and on until one day, without any explanation, they permanently disabled my account and stop responding me.
 
-At this point, the smart move would have been to just change my phone number and get a new account. But after going through all the headache and having spent a lot of time emailing them back and forth, I refused to bow, and instead, had the "brilliant idea" to spend even <ins>more of my time</ins> on this issue and came up with this project. 
+At this point, the smart move would have been to just change my phone number and get a new account. But after going through all the headache and having spent a lot of time emailing them back and forth, I refused to bow, and instead, had the "brilliant idea" to spend even <ins>more of my time</ins> on this issue and came up with this project.
 
 
 
@@ -46,7 +46,7 @@ LinkedIn proved to be a worthy adversary and a particularly hard site to crawl. 
     I am familiar with both [selenium](https://selenium-python.readthedocs.io/) and [requests](https://requests.readthedocs.io/en/master/) but because of this peculiarity I couldn't crawl using requests so I had to settle for **selenium**
 
 * #### Linkedin server reject a large series of requests from the same IP address in a given time period and suspends your ability to search for a few days. Also, the page rendering time would greatly vary between requests:
-    To avoid using long sleep times, I tried to use Selenium's Wait module to dynamically wait for the page to load but had little success. The code was unstable and breaking all the time so I was forced to increase the sleep times to solve both problems. 
+    To avoid using long sleep times, I tried to use Selenium's Wait module to dynamically wait for the page to load but had little success. The code was unstable and breaking all the time so I was forced to increase the sleep times to solve both problems.
 
 * #### LinkedIn is on the look out for scraper bot behavior patters:
     To reduce my chances of being flagged, I created and applied a set of functions that try to simulate human behavior by scrolling up and down and randomly clicking on profiles.
@@ -55,19 +55,20 @@ LinkedIn proved to be a worthy adversary and a particularly hard site to crawl. 
 
 <h2 style="text-align: center;"><span><i>Data Preparation</i></span></h2>
 
-Number of employees collected:
+Number of results in each city:
 
-* [San Francisco results](/data_collected/san_francisco.json): 940
-* [São Paulo results](/data_collected/sao_paulo.json): 
+* [San Francisco](/data_collected/san_francisco.json): 940
+* [São Paulo](/data_collected/sao_paulo.json): 1000
 
-However, not all results were relevant for my purposes as many of the people no longer worked at Uber or were non corporate employees. So I had to [clean up the data](data_wrangling.py) a little and come up with a employee list that was relevant and would increase my chances of being helped while saving resources. The following steps were taken:
+However, not all results were relevant for my purposes as many of my results no longer work at Uber among other things. So I went on to the process of [cleaning and exploring](data_analysis.ipynb) my dataset to come up with a more relevant employee list that would increase my chances of being helped while saving resources. Because the dataset is not complex, there wasn't much to so I wrote a little [script](data_cleaning.py) to execute the following actions:
 
-* **Searched and removed all duplicates and NaN**
-* **Removed all results with "LinkedIn Member" as a name**
-* **Removed all results not currently employed at Uber**
-* **Removed all employees in non-corporate positions**
+* **Search and remove duplicates**
+* **Remove all employees not currently employed at Uber**
+* **Remove all employees showing "LinkedIn Member" as a name**
+* **Remove all employees working in the capacity of a driver/motorista(portuguese)
+* **Remove all employees working for Uber Eats and Uber Freight, UberAir, UberAIR / UberElevate and Uber Works**
 
-After cleaning up the data, the next step was to develop a [email conscructor](email_factory.py) that would return the two email formats for each employee.
+After cleaning the data, I was left with 779 employees from San Francisco and 692 for São Paulo and my next step was to develop a [email conscructor](email_factory.py) that would return two emails per name, one in each format.
 
 
 
