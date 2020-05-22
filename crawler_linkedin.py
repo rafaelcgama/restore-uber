@@ -5,22 +5,28 @@ from random import randint
 from time import sleep, time
 from unidecode import unidecode
 from crawler_base import Crawler
-from utils import write_file, update_filename
+from utils import write_file, rename_file
 
 
 class LinkedInCrawler(Crawler):
-    def __init__(self):
+    """
+    Class to crawl LinkedIn's website to get employee names and position of a company in any given city
+    Allow any number of cities and company to be searched at the same time by including them in the
+    self.cities and self.companies lists.
+    """
+    def __init__(self, cities, companies):
         super().__init__()
         self.all_employees = []
         self.page = 1
         self.url_page_result = ''
         self.preffix = ''
         self.city = ''
+        self.company = ''
         self.last_page = ''
         self.last_saved_file = ''
         self.url_login = 'https://www.linkedin.com/login?fromSignIn=true'
-        self.companies = ['Uber']
-        self.cities = ['São Paulo', 'San Francisco']
+        self.cities = cities
+        self.companies = companies
         self.xpaths = {
             'location': {
                 'filter': './/button[contains(@aria-label,"Locations filter")]',
@@ -43,12 +49,26 @@ class LinkedInCrawler(Crawler):
             }
         }
 
-    def create_filepath(self, city, company):
+    def create_filepath(self, city, company, final=False):
+        """
+        Creates a new file_pathname
+        :param city: string, city name
+        :param company: string
+        :param final: bool,
+        :return: a string with a new file_pathname
+        """
         filename = f'data_{unidecode(city)}_{unidecode(company)}_page_{self.page}.json'
+        if final:
+            filename = f'{unidecode(city)}_{unidecode(company)}.json'
         file_path = join(getcwd(), 'data', filename)
         return file_path
 
-    def save_data(self):
+    def save_data(self, final=False):
+        """
+        Saves updates the JSON file being generated at the of the data extraction or updates the current file
+        :param: bool (optional), if selected it saves the final under and new name and moves it to another folder
+        :return: null
+        """
         city = self.city.replace(' ', '_').lower()
         company = self.company.replace(' ', '_').lower()
         old_filepath = self.last_saved_file
@@ -58,17 +78,21 @@ class LinkedInCrawler(Crawler):
             write_file(data, new_filepath)
             self.logger.info(f"First file created - page{self.page}")
 
+        elif final:
+            final_pathname = self.create_filepath(city, company, final=True)
+            rename_file(data, old_filepath, final_pathname)
+
         else:
-            update_filename(data, old_filepath, new_filepath)
+            rename_file(data, old_filepath, new_filepath)
             self.logger.info(f"File updated - {self.page}")
 
         self.last_saved_file = new_filepath
 
     def select_city(self, city):
-        '''
+        """
         Selects city
-        :param city: String with the name of the city to be selected
-        '''
+        :param city: str, name of the city to be selected
+        """
         self.logger.info('City selection: STARTED')
 
         self.wait_for_element(self.xpaths['location']['filter'])
@@ -88,11 +112,11 @@ class LinkedInCrawler(Crawler):
         self.logger.info('City selection: FINISHED')
 
     def add_company(self, company):
-        '''
+        """'''
         Add a company
-        :param company: String with the name of the company to be selected
+        :param company: string, name of the company to be selected
         :return: null
-        '''
+        """
         self.logger.info('Company selection: STARTED')
 
         self.click(self.xpaths['company']['filter'])
@@ -111,8 +135,8 @@ class LinkedInCrawler(Crawler):
 
     def click_random_profiles(self, employee_combox):
         """
-        Clicks in random LinkedIn profiles
-        :param employee_combox: List of all employees from a page
+        Click in random LinkedIn profiles
+        :param employee_combox: list() of all employees from a page
         :return: Nothing
         """
         urls = []
@@ -130,7 +154,7 @@ class LinkedInCrawler(Crawler):
     def random_actions(self, employee_combox):
         """
         Executes different actions to try to simulate human behavior to try avoid being flagged as a crawler
-        :param employee_combox: List of employees
+        :param employee_combox: list() of employees in one page result
         :return: null
         """
         if self.page % 8 == 0:
@@ -143,10 +167,10 @@ class LinkedInCrawler(Crawler):
             self.scroll_random()
 
     def extract_page(self, page, tries=0):
-        '''
+        """
         Extract employee info of one page
-        :return: A list of employees and their position in the company
-        '''
+        :return: list() of employees and their position in the company
+        """
         try:
             self.logger.info(f'Employee data from page number {page}: STARTED')
             if not len(self.preffix):
@@ -185,10 +209,10 @@ class LinkedInCrawler(Crawler):
                 self.logger.error(f'Failed to load an extract info from page number {page}')
 
     def get_employees_info(self):
-        '''
+        """
         Iterate through employees and collect name and position
         :return: A list() of dict() containing an employee name and position
-        '''
+        """
         self.logger.info('Employee data extraction: STARTED')
 
         if self.page == 1:
@@ -200,10 +224,16 @@ class LinkedInCrawler(Crawler):
             self.page = page
             self.extract_page(page)
 
+        self.save_data()
         self.logger.info('Employee data extraction: FINISHED')
         return self.all_employees
 
     def get_data(self, tries=0):
+        """
+        Main function that orchestrate the workflow of the data collection
+        :param tries: int, number of tries the crawler should be initiated in case of failure
+        :return: list() of dict() containing the name and position of all the employees from each search
+        """
         try:
             start_time = time()
             data = []
@@ -214,7 +244,7 @@ class LinkedInCrawler(Crawler):
                     self.get_employees_info()
                     self.save_data()
 
-            for city in self.cities:
+            for i, city in enumerate(self.cities):
                 self.login()
                 # Go to people search page
                 self.click('.//div[@id="global-nav-typeahead"]')
@@ -230,9 +260,9 @@ class LinkedInCrawler(Crawler):
                     self.company = company
 
                     employee_info_in_city = self.get_employees_info()
-                    self.save_data()
-
+                    self.save_data(final=True)
                     data.append(employee_info_in_city)
+
                     self.page = 1
                     self.all_employees = []
                     self.driver.close()

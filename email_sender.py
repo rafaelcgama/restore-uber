@@ -3,7 +3,9 @@ import logging
 import smtplib
 from time import sleep
 from string import Template
+from email_factory import EmailFactory
 from email.mime.text import MIMEText
+from utils import open_file, get_folder_files
 from email.mime.multipart import MIMEMultipart
 
 MY_USERNAME = os.getenv('USERNAME_EMAIL')
@@ -40,36 +42,31 @@ class EmailSender:
 
         s.login(MY_USERNAME, PASSWORD)
 
-        # For each contact, send the email:
         batch_count = 1
         email_count = 1
-        for contact in email_list:
-            for key, value in contact.items():
+        for person in email_list:
+            # Create two emails
+            person_emails = EmailFactory.email_constructor(person, 'uber')
+            for email in person_emails:
                 self.logger.info('Sending email {} from number {}'.format(email_count, batch_count))
 
                 if email_count % batch_size != 0:
-                    # format person's name based on what the different emails format
-                    if "email_1" in key:
-                        name = contact['email_1'].split('@')[0].capitalize()
-
-                    elif "email_2" in key:
-                        name = contact['email_2'].split('@')[0].capitalize()[:-1]
 
                     msg = MIMEMultipart()  # create a message object
 
                     # Add the person's name to the message template
-                    message = message_template.substitute(PERSON_NAME=name.title())
+                    message = message_template.substitute(PERSON_NAME=person.title())
 
                     # Setup the parameters of the message
                     msg['From'] = os.environ.get('MY_ADDRESS')
-                    msg['To'] = contact[key]
+                    msg['To'] = email
                     msg['Subject'] = "Please help me"
 
                     # Add the customized message body to msg object
                     msg.attach(MIMEText(message, 'plain'))
 
                     # Send the message via the server set up earlier.
-                    self.logger.info("Emailing {}".format(contact[key]))
+                    self.logger.info("Emailing {}".format(email))
                     s.send_message(msg)
                     del msg
 
@@ -93,7 +90,8 @@ class EmailSender:
 
 
 if __name__ == '__main__':
-    # data_list = ['emails_sf.json', 'emails_sp.json']
-    data_list = ['test.json']
-    email_sender = EmailSender()
-    email_sender.send_email(data_list)
+    file_list = get_folder_files('data')
+    for file in file_list:
+        email_list = open_file(file)
+        email_sender = EmailSender()
+        email_sender.send_email(email_list)

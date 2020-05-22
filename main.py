@@ -1,6 +1,7 @@
 from email_sender import EmailSender
 from email_factory import EmailFactory
 from crawler_linkedin import LinkedInCrawler
+from data_cleaning import clean_data
 
 # TODO: create move file to another folder
 #       write that this is how the workflow is supposed to run but to tests it is better to run each scrip to test ot
@@ -8,7 +9,9 @@ from crawler_linkedin import LinkedInCrawler
 
 
 if __name__ == '__main__':
-    # TODO: Pick city and companies lists
-    raw_data = LinkedInCrawler.get_data()
-    email_list = EmailFactory.email_constructor(raw_data)
-    EmailSender.send_email(email_list)
+    cities = ['São Paulo', 'San Francisco']
+    company = ['Uber']
+
+    raw_data = LinkedInCrawler.get_data(cities, company)
+    cleaned_data = clean_data()
+    EmailSender.send_email(cleaned_data)

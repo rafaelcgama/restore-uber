@@ -1,33 +1,18 @@
-
-
-conditions = 2
-
 class EmailFactory:
 
-    def email_constructor(self, mylist):
-        pass
-
-    def data_filter(self, mylist):
+    @staticmethod
+    def email_constructor(name, domain):
         """
-        Removes
-        :param mylist: a list of dicts
-        :return: a list of dicts
+        Constructs emails
+        :param mylist: str
+        :return: str
         """
+        name = name.split()
+        first_name = name[1]
+        last_name = name[2]
 
-    def delete_former_employees(self, mylist):
-        """
-        Removes all former employees
-        :param mylist: a list of dicts
-        :return: a list of dicts
-        """
-        new_list = []
-        for employee in mylist:
-            position = employee['position']
-            if position in conditions:
-                new_list.append(employee)
+        email1 = f'{first_name}@{domain}.com'
+        email2 = f'{first_name + last_name[0]}@{domain}.com'
 
-        return new_list
-
-    def delete_employees_by_position(self, mylist):
-        pass
+        return [email1, email2]
 

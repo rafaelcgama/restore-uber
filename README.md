@@ -49,20 +49,21 @@ LinkedIn proved to be a worthy adversary and a particularly hard site to crawl. 
     To avoid using long sleep times, I tried to use Selenium's Wait module to dynamically wait for the page to load but had little success. The code was unstable and breaking all the time so I was forced to increase the sleep times to solve both problems. 
 
 * #### LinkedIn is on the look out for scraper bot behavior patters:
-    To decrease my chances of being flagged, I created and applied a set of functions that try to simulate human behavior by scrolling up and down and randomly clicking on profiles.
+    To reduce my chances of being flagged, I created and applied a set of functions that try to simulate human behavior by scrolling up and down and randomly clicking on profiles.
     
 
 
 <h2 style="text-align: center;"><span><i>Data Preparation</i></span></h2>
 
-The crawler extracted 1000 names for each city searched. 
+Number of employees collected:
 
-* [San Francisco results](/data_collected/san_francisco.json)
-* [São Paulo results](/data_collected/sao_paulo.json)
+* [San Francisco results](/data_collected/san_francisco.json): 940
+* [São Paulo results](/data_collected/sao_paulo.json): 
 
 However, not all results were relevant for my purposes as many of the people no longer worked at Uber or were non corporate employees. So I had to [clean up the data](data_wrangling.py) a little and come up with a employee list that was relevant and would increase my chances of being helped while saving resources. The following steps were taken:
 
 * **Searched and removed all duplicates and NaN**
+* **Removed all results with "LinkedIn Member" as a name**
 * **Removed all results not currently employed at Uber**
 * **Removed all employees in non-corporate positions**
 
@@ -96,3 +97,4 @@ Since this is a pet project, the first and foremost goal was to have it up a run
 * **Find a way to reduce the number and duration of sleep times**
 * **Parallelize code in order to run multiple collection simultaneously**
 * **Refactor code to use a workflow management system, to become more robust to failures and be able to resume pipelines from failing points**
+* **Rotate between different IPs to reduce the change of getting flagged**
