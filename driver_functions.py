@@ -7,7 +7,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
 
-class DriverFuncions():
+class DriverFunctions:
 
     def init_driver(self):
         chrome_options = webdriver.ChromeOptions()
@@ -20,7 +20,8 @@ class DriverFuncions():
 
         return driver
 
-    def driver_ready(self, driver):
+    @staticmethod
+    def driver_ready(driver):
         WebDriverWait(driver, 10).until(
             lambda driver: driver.execute_script('return document.readyState') == 'complete')
 
@@ -46,7 +47,7 @@ class DriverFuncions():
         if self.page % 8 == 0:
             self.scroll_down(randint(5, 8) * 100)
             sleep(randint(1, 2))
-            self.scroll_up(randint(-2, -4) * 100)
+            self.scroll_up(randint(-4, -2) * 100)
             sleep(randint(1, 2))
             self.scroll_down(randint(1, 2) * 100)
             sleep(randint(1, 2))

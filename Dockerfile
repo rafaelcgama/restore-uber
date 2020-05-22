@@ -1,20 +1,10 @@
+FROM python:3.7.7
 
-FROM ubuntu:16.04
+WORKDIR /usr/src/app
 
-MAINTAINER Your Name "rafaelcgama@gmail.com"
+COPY requirements.txt ./
+RUN pip install --no-cache-dir -r requirements.txt
 
-RUN apt-get update -y && \
-    apt-get install -y python-pip python-dev
+COPY . .
 
-# We copy just the requirements.txt first to leverage Docker cache
-COPY ./requirements.txt /app/requirements.txt
-
-WORKDIR /app
-
-RUN pip install -r requirements.txt
-
-COPY . /app
-
-ENTRYPOINT [ "python" ]
-
-CMD [ "main.py" ]
+CMD [ "python", "./main.py" ]

@@ -2,13 +2,13 @@ import os
 import abc
 import logging
 from time import sleep
-from driver_functions import DriverFuncions
+from driver_functions import DriverFunctions
 
 MY_USERNAME = os.getenv('USERNAME_LINKEDIN')
 PASSWORD = os.getenv('PASSWORD_LINKEDIN')
 
 
-class Crawler(DriverFuncions):
+class Crawler(DriverFunctions):
     def __init__(self):
         self.logger = logging.getLogger(__name__)
         self.logger.level = 20
