@@ -32,13 +32,12 @@ pip-log.txt
 .tox
 nosetests.xml
 
-# virtual environment variables
-#*.env
+# environment variables
+*.env
 
 #jupyter files
 /.ipynb_checkpoints/
-*.ipynb
 
 #json
-*.json
+#*.json
 /tests/

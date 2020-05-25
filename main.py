@@ -1,6 +1,6 @@
 from time import time
 from email_sender import EmailSender
-from crawler_linkedin import LinkedInCrawler
+from crawler import LinkedInCrawler
 from data_cleaning import clean_data
 
 if __name__ == '__main__':
@@ -11,7 +11,7 @@ if __name__ == '__main__':
     to be searched by inserting it as a param in the get_data function below. 
     If the scripts are to be run separately this would be the order to run the files run the files:
     crawler_linkedin.py > data_cleaning.py > email_sender.py
-    
+
     If the user doesn't want to pester the Uber's employees again just make a list with a few names(first and last)
     and substitute the param in send_email function.
     """
@@ -19,6 +19,8 @@ if __name__ == '__main__':
 
     cities = ['São Paulo', 'San Francisco']
     company = ['Uber']
+    # TODO: You must install ChromeDrive in your computer from https://chromedriver.chromium.org/ for selenium to work
+
     # Collects the results from the all cities and companies combinations
     raw_data = LinkedInCrawler.get_data(cities, company)
     # Clean the data
