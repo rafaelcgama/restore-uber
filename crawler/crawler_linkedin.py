@@ -1,11 +1,9 @@
 import sys
-from os import getcwd
-from os.path import join
 from random import randint
 from time import sleep, time
 from unidecode import unidecode
-from crawler_base import Crawler
-from utils import write_file, rename_file
+from crawler import Crawler
+from utils import write_file, rename_file, create_path
 
 
 class LinkedInCrawler(Crawler):
@@ -49,20 +47,6 @@ class LinkedInCrawler(Crawler):
             }
         }
 
-    def create_filepath(self, city, company, final=False):
-        """
-        Creates a new file_pathname
-        :param city: string, city name
-        :param company: string
-        :param final: bool,
-        :return: a string with a new file_pathname
-        """
-        filename = f'data_{unidecode(city)}_{unidecode(company)}_page_{self.page}.json'
-        if final:
-            filename = f'{unidecode(city)}_{unidecode(company)}.json'
-        file_path = join(getcwd(), 'data', filename)
-        return file_path
-
     def save_data(self, final=False):
         """
         Saves updates the JSON file being generated at the of the data extraction or updates the current file
@@ -72,14 +56,15 @@ class LinkedInCrawler(Crawler):
         city = self.city.replace(' ', '_').lower()
         company = self.company.replace(' ', '_').lower()
         old_filepath = self.last_saved_file
-        new_filepath = self.create_filepath(city, company)
+        filename = f'{unidecode(city)}_{unidecode(company)}_page_{self.page}.json'
+        new_filepath = create_path(filename=filename, folder='../data_in_progress')
         data = self.all_employees
         if not len(old_filepath):
             write_file(data, new_filepath)
             self.logger.info(f"First file created - page{self.page}")
 
         elif final:
-            final_pathname = self.create_filepath(city, company, final=True)
+            final_pathname = create_path(filename=filename, folder='../data_raw', final=True)
             rename_file(data, old_filepath, final_pathname)
 
         else:
@@ -187,8 +172,8 @@ class LinkedInCrawler(Crawler):
                 name = self.get_text(employee, self.xpaths['extract_data']['name'])
                 position = self.get_text(employee, self.xpaths['extract_data']['position'])
                 self.all_employees.append({
-                    'name': name,
-                    'position': position
+                    'name': unidecode(name),
+                    'position': unidecode(position)
                 })
 
             self.random_actions(employee_combox)
@@ -208,9 +193,11 @@ class LinkedInCrawler(Crawler):
             else:
                 self.logger.error(f'Failed to load an extract info from page number {page}')
 
-    def get_employees_info(self):
+    def get_employees_info(self, num_pages=None):
         """
         Iterate through employees and collect name and position
+        :param num_pages: int, optional, if the user doesn't want to run a full collection, pick a number of pages
+                          to be searched
         :return: A list() of dict() containing an employee name and position
         """
         self.logger.info('Employee data extraction: STARTED')
@@ -220,6 +207,9 @@ class LinkedInCrawler(Crawler):
             self.scroll_end()
             self.last_page = self.find_multiple_elements(self.xpaths['extract_data']['last_page_num'])[-1].text
 
+        if num_pages is not None:
+            self.last_page = num_pages
+
         for page in range(self.page, int(self.last_page) + 1):
             self.page = page
             self.extract_page(page)
@@ -228,10 +218,12 @@ class LinkedInCrawler(Crawler):
         self.logger.info('Employee data extraction: FINISHED')
         return self.all_employees
 
-    def get_data(self, tries=0):
+    def get_data(self, num_pages=None, tries=0):
         """
         Main function that orchestrate the workflow of the data collection
         :param tries: int, number of tries the crawler should be initiated in case of failure
+        :param num_pages: int, optional, if the user doesn't want to run a full collection, pick a number of pages
+                          to be searched
         :return: list() of dict() containing the name and position of all the employees from each search
         """
         try:
@@ -259,7 +251,7 @@ class LinkedInCrawler(Crawler):
                     self.add_company(company)
                     self.company = company
 
-                    employee_info_in_city = self.get_employees_info()
+                    employee_info_in_city = self.get_employees_info(num_pages)
                     self.save_data(final=True)
                     data.append(employee_info_in_city)
 
@@ -268,7 +260,7 @@ class LinkedInCrawler(Crawler):
                     self.driver.close()
 
                     total = time() - start_time
-                    self.logger.info(f"Data collection completed in {total} seconds")
+                    self.logger.info(f"Data collection for city{city} and company{company}completed in {int(total)} seconds")
 
             return data
 
@@ -283,7 +275,15 @@ class LinkedInCrawler(Crawler):
                 self.logger.error('Failure to complete data collection')
 
 
+# TODO: You must install ChromeDrive in your computer from https://chromedriver.chromium.org/ for selenium to work
 if __name__ == '__main__':
-    crawler = LinkedInCrawler()
+    start = time()
+
+    cities = ['São Paulo', 'San Francisco']
+    company = ['Uber']
+    crawler = LinkedInCrawler(cities, company)
+    # if you do not want to run all page results pick the number(int) you desire and insert as a param in the get_data()
     data = crawler.get_data()
-    print('done')
+
+    total = time() - start
+    crawler.logger.info(f"Data collection for all selected companies in all selected cities completed")

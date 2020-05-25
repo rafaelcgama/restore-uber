@@ -2,14 +2,15 @@ import os
 import abc
 import logging
 from time import sleep
-from driver_functions import DriverFuncions
+from utils import DriverFunctions
 
 MY_USERNAME = os.getenv('USERNAME_LINKEDIN')
 PASSWORD = os.getenv('PASSWORD_LINKEDIN')
 
 
-class Crawler(DriverFuncions):
+class Crawler(DriverFunctions):
     def __init__(self):
+        self.url_login = ''
         self.logger = logging.getLogger(__name__)
         self.logger.level = 20
         self.MAX_TRIES = 5
@@ -41,7 +42,7 @@ class Crawler(DriverFuncions):
             if tries < self.MAX_TRIES:
                 self.logger.info(f'Retrying to login...')
                 tries += 1
-                return self.login(self.url)
+                return self.login(self.url_login)
             raise Exception(f'Failure to login, {e}')
 
     @abc.abstractmethod

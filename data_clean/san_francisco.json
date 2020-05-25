@@ -1,9 +1,5 @@
 [
     {
-        "name": "Jennifer Hasche",
-        "position": "Head of Tech Recruiting - EMEA"
-    },
-    {
         "name": "Nevada Griffin",
         "position": "Strategic Partnerships Lead - Uber Health at Uber | Healthcare leader | McKinsey & Co. alumnus"
     },
@@ -36,20 +32,8 @@
         "position": "Software Engineer at Uber"
     },
     {
-        "name": "Sophia(Weixuezi) WANG",
-        "position": "R | Python | Tableau | SQL | AWS Experience"
-    },
-    {
         "name": "Simit Shah",
         "position": "Actively looking for Software Engineering opportunities | Software Engineer at Uber"
-    },
-    {
-        "name": "Ananda Kanagaraj Sankar",
-        "position": "Engineering Leader, Connected Airspace, Uber Elevate"
-    },
-    {
-        "name": "Tolga Irdem",
-        "position": "Actively seeking new opportunities | Ex-Uber & Amazon"
     },
     {
         "name": "Kevin Heung",
@@ -78,14 +62,6 @@
     {
         "name": "Xiaoyu Shi",
         "position": "Engineering Manager at Uber"
-    },
-    {
-        "name": "Bjoern H.",
-        "position": "Technology Executive"
-    },
-    {
-        "name": "Alexandra Tomaily",
-        "position": "Quality Assurance Engineer"
     },
     {
         "name": "Lewis(Yisi) Liu",
@@ -136,10 +112,6 @@
         "position": "Software Engineer II at Uber"
     },
     {
-        "name": "Zhaohui Guo",
-        "position": "Engineer Manager: Machine Learning"
-    },
-    {
         "name": "Vibhu Sharma",
         "position": "Product Manager at Uber"
     },
@@ -160,10 +132,6 @@
         "position": "Sr. Eng Manager at Uber (Hiring RPC dev in Bay Area, manager & team in India)"
     },
     {
-        "name": "Darby Brennan",
-        "position": "PMO Executive | ERP | Strategic Value Realization | Business Transformation | Fluent Spanish Speaker | Authentic Leader"
-    },
-    {
         "name": "Betty Chao",
         "position": "Senior Analyst, Financial Risk Management at Uber"
     },
@@ -178,10 +146,6 @@
     {
         "name": "Qiyao Qin",
         "position": "Senior Software Engineer at Uber"
-    },
-    {
-        "name": "Susmit Biswas",
-        "position": "Engineering Manager | Data Pipelines, Spark, ML, AWS"
     },
     {
         "name": "Koyel Banerjee",
@@ -200,10 +164,6 @@
         "position": "Director, Strategy and Planning - Uber Eats at Uber"
     },
     {
-        "name": "Noah Cohen",
-        "position": "Experienced Data Engineer and Technical Consultant"
-    },
-    {
         "name": "Kendall Pennington",
         "position": "Strategic Partnerships at Uber"
     },
@@ -218,10 +178,6 @@
     {
         "name": "Shefali Budhraja",
         "position": "Director, HR at Uber"
-    },
-    {
-        "name": "Yanmin Lee",
-        "position": "Technology and e-commerce business leader with international experience in strategy, growth and operations"
     },
     {
         "name": "Kevin Hutchinson",
@@ -242,14 +198,6 @@
     {
         "name": "John Jacobs",
         "position": "Product Manager at Uber ATG"
-    },
-    {
-        "name": "Wayne Cunningham",
-        "position": "Technical Content and Branding Specialist"
-    },
-    {
-        "name": "Tor K.",
-        "position": "Engineering Strategy for Data Centers"
     },
     {
         "name": "Sachin Lakhanpal",
@@ -280,36 +228,12 @@
         "position": "Senior Associate, Strategic Finance at Uber"
     },
     {
-        "name": "Tony Z.",
-        "position": "Building new businesses..."
-    },
-    {
-        "name": "Eric Castronovo",
-        "position": "Santa Clara University Graduate Student"
-    },
-    {
         "name": "Xavier Van Chau",
         "position": "Head of Business Product Communications at Uber"
     },
     {
-        "name": "Wen Gu",
-        "position": "Continuous Integration-Continuous Delivery"
-    },
-    {
-        "name": "Kriti Sharma",
-        "position": "Senior TPM, Security and Privacy"
-    },
-    {
-        "name": "Gabriela Fernandez",
-        "position": "Sr Recruiting Coordinator"
-    },
-    {
         "name": "Vidya Padmanabhan",
         "position": "Sr. Global HR Business Partner at Uber"
-    },
-    {
-        "name": "Alpesh Vaghasia",
-        "position": "New Mobility Firmware Leader (Bikes, Scooters and Batteries)"
     },
     {
         "name": "Sam (Saeed) Behnam",
@@ -336,10 +260,6 @@
         "position": "Engineering Manager at Uber"
     },
     {
-        "name": "Cyrus Sarraf",
-        "position": "Advanced Technologies Group"
-    },
-    {
         "name": "Nagendra Kumar",
         "position": "Engineer manager/lead at Uber"
     },
@@ -356,16 +276,12 @@
         "position": "Senior Engineering Manager at Uber"
     },
     {
-        "name": "Aanand Dav\u00e9",
+        "name": "Aanand Dave",
         "position": "Tech Operations Specialist at Uber"
     },
     {
         "name": "Kunal Veera",
         "position": "Software Engineer Uber / Ex-McKesson / Ex-Cisco / Algorithmist"
-    },
-    {
-        "name": "Michael Lomio",
-        "position": "Digital Marketing | Marketing Operations | Marketing Technology"
     },
     {
         "name": "Marty Ellis",
@@ -382,14 +298,6 @@
     {
         "name": "Deba Chatterjee",
         "position": "Product Management at Uber| Startups | Ex-Oracle"
-    },
-    {
-        "name": "Danielle Reid",
-        "position": "Chief of Staff to the VP of Safety & Insurance"
-    },
-    {
-        "name": "Akshay Jain",
-        "position": "Moving people and stuff, more efficiently"
     },
     {
         "name": "John Park",
@@ -412,10 +320,6 @@
         "position": "Senior TPM - Developer Platform (CI/CD) at Uber"
     },
     {
-        "name": "Desiree Boudin",
-        "position": "I am seeking a new role as an Executive assistant and/or project manager for events."
-    },
-    {
         "name": "Venkatesh Rudraraju",
         "position": "Senior Software Engineer at Uber"
     },
@@ -432,7 +336,7 @@
         "position": "EA Business Partner II at Uber"
     },
     {
-        "name": "Cole G\u00e1bor",
+        "name": "Cole Gabor",
         "position": "Junior Business Analyst at Uber"
     },
     {
@@ -456,16 +360,8 @@
         "position": "Data Analyst II at Uber"
     },
     {
-        "name": "LinkedIn Member",
-        "position": "Software Engineer at Uber"
-    },
-    {
         "name": "Shriya Parthasarathy",
         "position": "Software Engineer @ Uber AdTech"
-    },
-    {
-        "name": "Zelia Rosenzweig",
-        "position": "Experienced Data Analyst in Marketplaces and Trust & Safety"
     },
     {
         "name": "Wenjing (Karen) Yang",
@@ -474,10 +370,6 @@
     {
         "name": "YaYa Zhou",
         "position": "Data Analytics @ Uber"
-    },
-    {
-        "name": "Emilee Urbanek",
-        "position": "Software Engineer"
     },
     {
         "name": "Esther Ko",
@@ -504,10 +396,6 @@
         "position": "Senior - Technical Revenue, Products and Strategy at Uber"
     },
     {
-        "name": "Grace Wu",
-        "position": "FinTech product leaders by combining technology with good user experience."
-    },
-    {
         "name": "Ankit Tare",
         "position": "Senior Software Engineer at Uber"
     },
@@ -530,10 +418,6 @@
     {
         "name": "Pratik M.",
         "position": "Data Scientist II @ Uber"
-    },
-    {
-        "name": "Jheel D.",
-        "position": "Safety Analytics"
     },
     {
         "name": "Jian(Jonathan) Y.",
@@ -576,10 +460,6 @@
         "position": "Product @ Uber"
     },
     {
-        "name": "Zhaobo Zhang",
-        "position": "Data Analytics | Risk Strategy"
-    },
-    {
         "name": "Divya Dalapathi",
         "position": "Group Product Manager at Uber"
     },
@@ -604,20 +484,12 @@
         "position": "Data Scientist at Uber"
     },
     {
-        "name": "Shripad Thite",
-        "position": "Software Engineer and Computer Scientist (available for consulting in ML applications in health tech and climate change)"
-    },
-    {
         "name": "Kelsey Mrkonic",
         "position": "Product Operations Manager at Uber"
     },
     {
         "name": "Prajakta H.",
         "position": "Software Engineer at Uber"
-    },
-    {
-        "name": "Nathan Alan Dinh",
-        "position": "Senior Mobile Marketing Lead - Rider/ Driver at Uber"
     },
     {
         "name": "Pallavi Dutta",
@@ -648,10 +520,6 @@
         "position": "PM manager 6 years, Uber, ClassDojo, Google, McKinsey"
     },
     {
-        "name": "Ryan Cunningham",
-        "position": "AI & Product Strategy | ex-Uber, Eats, Elevate"
-    },
-    {
         "name": "Donovan Pereira",
         "position": "Product Manager, Payments at Uber"
     },
@@ -676,14 +544,6 @@
         "position": "Product @ Uber"
     },
     {
-        "name": "Kate Parker",
-        "position": "Head of Global Marketing & Strategic Initiatives"
-    },
-    {
-        "name": "Matt McKinney",
-        "position": "Data Science @ Uber Freight"
-    },
-    {
         "name": "Suganya Ramachandran",
         "position": "Software Engineer | Uber"
     },
@@ -704,10 +564,6 @@
         "position": "Data Scientist at Uber"
     },
     {
-        "name": "Gang Zhang",
-        "position": "Search & Storage platform"
-    },
-    {
         "name": "ARAH G.",
         "position": "Uber & Obj-She"
     },
@@ -720,16 +576,8 @@
         "position": "Product Manager at Uber"
     },
     {
-        "name": "Hanuth Singh",
-        "position": "Finance | Analytics | Product"
-    },
-    {
         "name": "Chunyi Lyu",
         "position": "Software Engineer at Uber"
-    },
-    {
-        "name": "Archna Kumari",
-        "position": "Data Science and Travel enthusiast!"
     },
     {
         "name": "Shellena Chen",
@@ -738,10 +586,6 @@
     {
         "name": "Rohit Sabnis",
         "position": "Fintech Partnerships at Uber"
-    },
-    {
-        "name": "William Ng",
-        "position": "Big Data Engineer"
     },
     {
         "name": "Sahil Bahri",
@@ -764,10 +608,6 @@
         "position": "Senior Software Engineer at Uber"
     },
     {
-        "name": "Vilma Colon",
-        "position": "Senior Regional Marketing Manager"
-    },
-    {
         "name": "Rashi Singh",
         "position": "Scaling identity products @ Uber"
     },
@@ -784,7 +624,7 @@
         "position": "Product Marketing Manager - New Mobility at Uber"
     },
     {
-        "name": "Charles Ratt\u00e9",
+        "name": "Charles Ratte",
         "position": "Finance & Strategy at Uber"
     },
     {
@@ -800,16 +640,8 @@
         "position": "Product Lead at Uber"
     },
     {
-        "name": "James Greenhill",
-        "position": "Data Peddler"
-    },
-    {
         "name": "Lara Kristina Avisov",
         "position": "DEI @ Uber, Culture Enthusiast, Data Nerd. Ex-Airbnb, Ex-Apple"
-    },
-    {
-        "name": "Honey Patel",
-        "position": "Head of Strategy & Business Operations"
     },
     {
         "name": "Monica Parham",
@@ -856,10 +688,6 @@
         "position": "Product @ Uber, Facebook, Staples.com | ex-Founder"
     },
     {
-        "name": "Neeraj Khanchandani",
-        "position": "Group Product Manager"
-    },
-    {
         "name": "Mohan Wang",
         "position": "Risk Strategy Analyst at Uber"
     },
@@ -870,10 +698,6 @@
     {
         "name": "Renan Cakirerk",
         "position": "Sr. Software Engineer - Backend at Uber"
-    },
-    {
-        "name": "Esha Bhatnagar",
-        "position": "Regional Program Leader Learning & Organization Development"
     },
     {
         "name": "Carsten Jacobsen",
@@ -892,24 +716,12 @@
         "position": "Software Engineer at Uber"
     },
     {
-        "name": "Stan Chan",
-        "position": "Technology Enablement"
-    },
-    {
         "name": "Gustavo Carvalho",
         "position": "Senior Associate, Strategic Finance at Uber"
     },
     {
         "name": "Andrei Stanescu",
         "position": "New Mobility (JUMP) @ Uber"
-    },
-    {
-        "name": "Andrew Simon",
-        "position": "Product and Ops Leadership, ex-Uber"
-    },
-    {
-        "name": "Pamela Huang",
-        "position": "Lead, Strategic Partnerships"
     },
     {
         "name": "Henry Knapp",
@@ -928,24 +740,12 @@
         "position": "Senior Product Designer at Uber"
     },
     {
-        "name": "Brittanie Williams",
-        "position": "Brand & Marketing Strategy | Operations"
-    },
-    {
-        "name": "Cindy Masterson, CCP",
-        "position": "Compensation Leader | Consultant"
-    },
-    {
         "name": "Matt Bao",
         "position": "Software Engineer II at Uber"
     },
     {
         "name": "Youngsun Shin",
         "position": "Product Operations Manager at Uber Eats"
-    },
-    {
-        "name": "Jingxue (Jessica) Zhou",
-        "position": "Electrical Engineer | Actively seeking for opportunities"
     },
     {
         "name": "Brian Rose",
@@ -970,10 +770,6 @@
     {
         "name": "Shagun Vatsa",
         "position": "Senior Product Marketing Manager @ Uber"
-    },
-    {
-        "name": "Tom Burke",
-        "position": "Head of Demand Generation, Uber Freight"
     },
     {
         "name": "Ryan Drebin",
@@ -1012,10 +808,6 @@
         "position": "Senior Counsel, Equity Compensation/M&A at Uber"
     },
     {
-        "name": "Raoni Marcelino",
-        "position": "Looking for a Software Engineering position"
-    },
-    {
         "name": "Dayo Simms, ESQ. CIPP(G), CIPP(US)",
         "position": "Associate Counsel, Privacy at Uber"
     },
@@ -1024,24 +816,12 @@
         "position": "Senior Manager, Eats Global Safety at Uber"
     },
     {
-        "name": "Carlos Villicana",
-        "position": "Marketing specialist with a passion for community driven products."
-    },
-    {
         "name": "Megan Holterhoff",
         "position": "Technical Recruiting at Uber"
     },
     {
-        "name": "Geoffery Moore",
-        "position": "Ex-Uber | Regional Operations Manager"
-    },
-    {
         "name": "Abhisek Saikia",
         "position": "Senior Software Engineer at Uber"
-    },
-    {
-        "name": "Gabriela Medina Florez",
-        "position": "Product Designer at Uber Freight"
     },
     {
         "name": "Angela Tang",
@@ -1056,10 +836,6 @@
         "position": "Program Manager at Uber"
     },
     {
-        "name": "Rhian Morgan",
-        "position": "Executive Assistant to the Head of Uber Freight"
-    },
-    {
         "name": "Thomas Young",
         "position": "Senior Analyst, Growth Analytics at Uber"
     },
@@ -1070,10 +846,6 @@
     {
         "name": "Amos Davis",
         "position": "Senior Counsel at Uber"
-    },
-    {
-        "name": "Ogo Ifelayo",
-        "position": "Business Development"
     },
     {
         "name": "Mustafa Zaffer",
@@ -1104,10 +876,6 @@
         "position": "Principal Recruiter at Uber"
     },
     {
-        "name": "Alyssa Allen",
-        "position": "Director, Employment Legal"
-    },
-    {
         "name": "Courtney Francois",
         "position": "Executive Assistant at Uber"
     },
@@ -1120,20 +888,12 @@
         "position": "Making your ETAs accurate for Uber Maps"
     },
     {
-        "name": "LinkedIn Member",
-        "position": "Sr Software Engineer at Uber"
-    },
-    {
         "name": "Utsav Shah",
         "position": "Data Analyst II at Uber"
     },
     {
         "name": "Henry Clausner",
         "position": "Corporate Development at Uber"
-    },
-    {
-        "name": "Neal Watterson",
-        "position": "Business Manager, Investor, Carpenter"
     },
     {
         "name": "Lezhi Li",
@@ -1252,10 +1012,6 @@
         "position": "Senior Software Engineer at Uber"
     },
     {
-        "name": "Shivani Kini",
-        "position": "Sr. Data Engineer"
-    },
-    {
         "name": "Thomas Ribeiro da Luz",
         "position": "Senior manager @ Uber"
     },
@@ -1274,10 +1030,6 @@
     {
         "name": "Tian Liu",
         "position": "Software Engineer at Uber"
-    },
-    {
-        "name": "Zhuyun G.",
-        "position": "Data Scientist"
     },
     {
         "name": "Sara Carr",
@@ -1302,10 +1054,6 @@
     {
         "name": "Stephanie Ginsberg",
         "position": "Marketing Team Lead, Global Job Boards at Uber"
-    },
-    {
-        "name": "Tina Nikou",
-        "position": "Apple | ex-Uber"
     },
     {
         "name": "Siddharth Raja",
@@ -1368,10 +1116,6 @@
         "position": "Test Engineer at Uber"
     },
     {
-        "name": "Juncheng (Mike) Zhan",
-        "position": "Software engineer"
-    },
-    {
         "name": "Dhruv Shah",
         "position": "Software Engineer at Uber ATG"
     },
@@ -1404,10 +1148,6 @@
         "position": "Director of Product @Uber. Product Science. Early-stage Investor. Past: Google; MIT Media Lab; founder (acq.)"
     },
     {
-        "name": "Arnav Kansal",
-        "position": "Passionate about high performance systems"
-    },
-    {
         "name": "Abinaya Pitchai",
         "position": "Software Engineer II at Uber"
     },
@@ -1432,16 +1172,8 @@
         "position": "Senior Software Engineer at Uber"
     },
     {
-        "name": "Pailey Li",
-        "position": "Lead Technical Writer"
-    },
-    {
         "name": "Dario Villagomez",
         "position": "Sr. Supplier Quality Engineer at Uber"
-    },
-    {
-        "name": "Kelechi Dike",
-        "position": "Software Engineer"
     },
     {
         "name": "Manjeera Patnaikuni",
@@ -1488,10 +1220,6 @@
         "position": "Senior Software Engineer at Uber"
     },
     {
-        "name": "Thomas Williams",
-        "position": "thaw"
-    },
-    {
         "name": "Ray Somcio",
         "position": "Software Engineer at Uber"
     },
@@ -1512,10 +1240,6 @@
         "position": "Recruiting Director at Uber"
     },
     {
-        "name": "Zandrea Rox",
-        "position": "Program Manager | Analyst | Emerging Technologies"
-    },
-    {
         "name": "Dhruv Sharma",
         "position": "Engineering at Uber"
     },
@@ -1532,24 +1256,12 @@
         "position": "Engineering at Uber"
     },
     {
-        "name": "Jay M",
-        "position": "Business Systems | Finance Products"
-    },
-    {
         "name": "Bo Cao",
         "position": "Network Engineering, Uber"
     },
     {
         "name": "Gopal Biyani",
         "position": "Senior Software Engineer at Uber"
-    },
-    {
-        "name": "Agam S. Virk",
-        "position": "Technology & Product Leadership"
-    },
-    {
-        "name": "Krithika Ravi Kumar",
-        "position": "Telecom Lead | CSM\u00ae"
     },
     {
         "name": "Katina Dam",
@@ -1572,7 +1284,7 @@
         "position": "Sr Software Engineer at Uber"
     },
     {
-        "name": "Erkan Ta\u015f",
+        "name": "Erkan Tas",
         "position": "Sr. Product Manager, Machine Learning, Self-Driving at Uber ATG"
     },
     {
@@ -1588,20 +1300,12 @@
         "position": "Special Projects @ Uber - Team Lead"
     },
     {
-        "name": "Gideon Oppenheimer",
-        "position": "Head of Strategic Finance - Uber Freight"
-    },
-    {
         "name": "Janie Mah",
         "position": "People Development at Uber"
     },
     {
         "name": "Yu-Hong Tu",
         "position": "Production Operations Analyst at Uber"
-    },
-    {
-        "name": "Mattis Fj\u00e4llstr\u00f6m",
-        "position": "Embedded Lead, Jump"
     },
     {
         "name": "Kathy On",
@@ -1618,10 +1322,6 @@
     {
         "name": "Suzanne Eyler Paris",
         "position": "Sr. Brand Producer/Program Manager at Uber"
-    },
-    {
-        "name": "Tricia Ransom, MATD",
-        "position": "Instructional Designer | Elearning Developer | Curriculum Designer | Course Facilitator | Conference Presenter"
     },
     {
         "name": "Jiyon Yun",
@@ -1648,32 +1348,16 @@
         "position": "Sales Ops/Strategy at Uber Eats | Salesforce & MuleSoft Alum"
     },
     {
-        "name": "Roopa Radhakrishnan",
-        "position": "Deal Negotiations"
-    },
-    {
         "name": "Gautham Chinnaswami",
         "position": "Global Program Manager at Uber | Georgetown MBA | Business Strategy & Operations | Product Operations & Analytics"
-    },
-    {
-        "name": "Carman Nareau",
-        "position": "Immigration Specialist & Program Manager"
     },
     {
         "name": "Morgan Elam",
         "position": "Product Counsel at Uber"
     },
     {
-        "name": "Megan P.",
-        "position": "Trusted legal advisor, product counselor, and business partner with specialized focus on safety and screening issues."
-    },
-    {
         "name": "Sindhuja Padmanabhan",
         "position": "Senior Program Manager, Tech at Uber"
-    },
-    {
-        "name": "Mahesh Datt",
-        "position": "Engineering Leader"
     },
     {
         "name": "Kevin Mao",
@@ -1686,10 +1370,6 @@
     {
         "name": "Linn Lundstad",
         "position": "Senior Manager, Global HR Business Partner at Uber"
-    },
-    {
-        "name": "Sourabh Mishra",
-        "position": "Product and Program Executive | Operations & Strategic Leadership"
     },
     {
         "name": "Mark Ismay",
@@ -1712,10 +1392,6 @@
         "position": "Product Operations Manager at Uber"
     },
     {
-        "name": "Jarod J. Buna",
-        "position": "Silicon Valley Attorney"
-    },
-    {
         "name": "Daniel Camilleri",
         "position": "UX Research Lead at Uber & Registered Psychologist"
     },
@@ -1728,10 +1404,6 @@
         "position": "Data Scientist, Policy Research at Uber"
     },
     {
-        "name": "Ren\u00e9 Jerez",
-        "position": "Network Operations Engineer, Team Lead"
-    },
-    {
         "name": "Brian Le Vu",
         "position": "Product Operations @ Uber"
     },
@@ -1740,16 +1412,8 @@
         "position": "Senior Executive Business Partner to Deputy General Council at Uber"
     },
     {
-        "name": "Sean Lopez",
-        "position": "A creative at heart, processor at core, brewer of imagination, plus a doer and more."
-    },
-    {
         "name": "Kevin Liu",
         "position": "Senior Program Manager for Identity and Access Management at Uber"
-    },
-    {
-        "name": "Jeffery Osbun",
-        "position": "Global Compliance"
     },
     {
         "name": "Varun Santhanam",
@@ -1770,10 +1434,6 @@
     {
         "name": "Nick Martin",
         "position": "Sourcing Lead at Uber"
-    },
-    {
-        "name": "Reid Smiegiel",
-        "position": "Senior Sales Operations Associate, Uber Freight at Uber"
     },
     {
         "name": "Joseph Werede",
@@ -1800,10 +1460,6 @@
         "position": "Fulfillment Operations Manager, Supply Chain at Uber"
     },
     {
-        "name": "Garrett Camp",
-        "position": "founder @ Expa"
-    },
-    {
         "name": "Tania Chopra",
         "position": "Software Engineer II at Uber"
     },
@@ -1812,20 +1468,12 @@
         "position": "Strategy and Ops at Uber"
     },
     {
-        "name": "Kasia Wiacek",
-        "position": "Sourcing, Sourcing, Sourcing (the talent/ recruiting kind)"
-    },
-    {
         "name": "Sreeta Gorripaty",
         "position": "Uber || Apple || UC Berkeley || IIT Bombay || HBS"
     },
     {
         "name": "Ross Mahaffey",
         "position": "Senior Manager, Technical Sourcing at Uber"
-    },
-    {
-        "name": "Han Li",
-        "position": "Software engineer"
     },
     {
         "name": "Shabnam Emdadi",
@@ -1848,10 +1496,6 @@
         "position": "Data Science Manager at Uber"
     },
     {
-        "name": "Isabelle Putnam",
-        "position": "Building out Accounting & Finance teams in SF & Dallas !"
-    },
-    {
         "name": "Yanze Song",
         "position": "Senior Software Engineer at Uber [We are hiring!]"
     },
@@ -1862,14 +1506,6 @@
     {
         "name": "Peter Deng",
         "position": "Head of Rider at Uber"
-    },
-    {
-        "name": "Shuyi Z.",
-        "position": "Software Engineer"
-    },
-    {
-        "name": "Leslie Cardenas",
-        "position": "Ex-Uber seeking new opportunities"
     },
     {
         "name": "Saurav Kaushik",
@@ -1912,10 +1548,6 @@
         "position": "Sr. Staff Software Engineer at Uber"
     },
     {
-        "name": "Jonathan Hall",
-        "position": "Chief Economist"
-    },
-    {
         "name": "Gaurav Garg",
         "position": "Head of Engineering @ Uber Rides & Marketplace"
     },
@@ -1946,10 +1578,6 @@
     {
         "name": "Zhenya Lindgardt",
         "position": "VP | Platform Growth & Customer Engagement at Uber"
-    },
-    {
-        "name": "Thomas Ranese",
-        "position": "VP of Global Marketing"
     },
     {
         "name": "Olivia Zhang",
@@ -1984,10 +1612,6 @@
         "position": "Product @ Uber"
     },
     {
-        "name": "Gianni Sesto",
-        "position": "Technical Recruiting Manager"
-    },
-    {
         "name": "Adelia Curtis Duarte",
         "position": "Head of Recruiting (Director), Emerging Technologies at Uber"
     },
@@ -1996,16 +1620,8 @@
         "position": "Software Engineer (Android) at Uber"
     },
     {
-        "name": "Rohit N.",
-        "position": "Sr. Product Manager, Tech."
-    },
-    {
         "name": "Yu Guo, Ph.D.",
         "position": "Head of Machine Learning Platform, Autonomous Vehicle, Uber ATG"
-    },
-    {
-        "name": "Zheng Shao",
-        "position": "Open Source Big Data"
     },
     {
         "name": "Daniel Chen",
@@ -2048,10 +1664,6 @@
         "position": "Product Manager at Uber"
     },
     {
-        "name": "John Castillo",
-        "position": "Senior Recruiter looking for next opportunity to build awesome teams. Ex-Uber, Ex-Tesla"
-    },
-    {
         "name": "M Waleed Kadous",
         "position": "Eng Strategy Lead, Office of the CTO at Uber"
     },
@@ -2060,20 +1672,8 @@
         "position": "Global SEO Lead at Uber - Biz Intelligence"
     },
     {
-        "name": "Mihir Shah",
-        "position": "Co-CEO, JLL Technologies at JLL"
-    },
-    {
-        "name": "Gagan Singh",
-        "position": "Product Management Leadership"
-    },
-    {
         "name": "Maya Eichler",
         "position": "Director of Product, Uber Eats"
-    },
-    {
-        "name": "Stephanie Romero",
-        "position": "Sales Operations Analyst"
     },
     {
         "name": "Samar Sharma",
@@ -2082,10 +1682,6 @@
     {
         "name": "Sumanth Kolar",
         "position": "Engineering Leadership at Uber"
-    },
-    {
-        "name": "Liam P.",
-        "position": "Founder at Stealth Startup"
     },
     {
         "name": "Dominique Vincenti, CIA, CRMA",
@@ -2136,10 +1732,6 @@
         "position": "Software Engineer II at Uber"
     },
     {
-        "name": "Venkat Palampally",
-        "position": "Software Engineer | Infrastructure | Distributed Systems | Machine Learning"
-    },
-    {
         "name": "Abhishek Budhraja",
         "position": "HR Business Partner at Uber"
     },
@@ -2160,10 +1752,6 @@
         "position": "Tech Lead Manager at Uber"
     },
     {
-        "name": "Yifei Wu",
-        "position": "Graduate Student in Computer Science at UCSC"
-    },
-    {
         "name": "Max Wenneker",
         "position": "Head of US and Canada Central Operations, JUMP (Uber)"
     },
@@ -2180,10 +1768,6 @@
         "position": "Production Engineering Program Manager at Uber"
     },
     {
-        "name": "Sam Xiao",
-        "position": "Let's ship it!"
-    },
-    {
         "name": "Pengfei Gao",
         "position": "Software Engineer at Uber"
     },
@@ -2196,20 +1780,12 @@
         "position": "Engineering Leadership at Uber [Big Data, Infrastructure]- (hiring for my SF & Palo Alto teams)"
     },
     {
-        "name": "Nishant Bhajaria",
-        "position": "Author, Privacy and Security Leader, Digital Product Architect"
-    },
-    {
         "name": "Maximiliano Benedetto",
         "position": "Tech Lead - Senior Software Engineer II at Uber"
     },
     {
         "name": "Dawn Carter",
         "position": "Director, Global University Recruiting at Uber"
-    },
-    {
-        "name": "Jennifer Vescio",
-        "position": "Startup Advisor + Executive/Career Coach + Investor; Entertainment, Sports, Tech & Media Executive"
     },
     {
         "name": "Allen N.",
@@ -2256,10 +1832,6 @@
         "position": "Data Science Leader at Uber | Applied AI, Machine Learning & Product Analytics Executive | Data Evangelist & Strategist"
     },
     {
-        "name": "Stephanie Lopez",
-        "position": "Human Resources Assistant at Berkshire Hathaway Homestate Companies"
-    },
-    {
         "name": "Yi-Bing Shi",
         "position": "Product Manager at Uber"
     },
@@ -2288,10 +1860,6 @@
         "position": "Senior Design + Research Recruiting at Uber"
     },
     {
-        "name": "Rahul Vijay",
-        "position": "Tech Deals, Supply Chain & Operations | Board Advisor | Global Speaker"
-    },
-    {
         "name": "Sishi Long",
         "position": "Senior Software Engineer at Uber"
     },
@@ -2308,10 +1876,6 @@
         "position": "PM at Uber"
     },
     {
-        "name": "Miranda Sulley",
-        "position": "Ex-Uber | Seeking new opportunity in the Bay Area"
-    },
-    {
         "name": "Jevone Jones",
         "position": "Product Operations @ Uber"
     },
@@ -2324,20 +1888,12 @@
         "position": "Research Engineer, Uber AI Labs"
     },
     {
-        "name": "Jason Franks",
-        "position": "Head of IT Operations - Senior Director role scaling global IT operations"
-    },
-    {
         "name": "Vikram Kapur, CSP, SMS, MS, MBA",
         "position": "Head of Safety and Compliance @ Uber"
     },
     {
         "name": "Duncan Logie",
         "position": "Strategic Finance - New Mobility @ Uber (open to new ops!)"
-    },
-    {
-        "name": "Katie Rudolph",
-        "position": "Global Content Strategy & Operations"
     },
     {
         "name": "Audrey Ulloa",
@@ -2348,11 +1904,7 @@
         "position": "Product@Uber"
     },
     {
-        "name": "Patrycja Eckert",
-        "position": "Technical Recruiting Manager"
-    },
-    {
-        "name": "Dyan A. Lude\u00f1a Ferraris, Ph.D.",
+        "name": "Dyan A. Ludena Ferraris, Ph.D.",
         "position": "Global Strategy & Planning Program Manager, Diversity & Inclusion at Uber"
     },
     {
@@ -2380,16 +1932,8 @@
         "position": "Executive Guru and Operations Expert at Uber"
     },
     {
-        "name": "Tramel Dodd",
-        "position": "Learning & Organizational Development leader"
-    },
-    {
         "name": "Pavan Krishnamurthy",
         "position": "Senior Software Engineer at Uber"
-    },
-    {
-        "name": "Deepal Singhal",
-        "position": "Principal, Tech Leadership Recruiting"
     },
     {
         "name": "Ayesha Yasmeen",
@@ -2412,10 +1956,6 @@
         "position": "Software Engineer at Uber"
     },
     {
-        "name": "Xin Jin",
-        "position": "Machine Learning Researcher & Engineer"
-    },
-    {
         "name": "Chirag Parekh",
         "position": "Systems Engineer (Oracle EBS) at Uber"
     },
@@ -2428,16 +1968,8 @@
         "position": "HR Business Partner at Uber"
     },
     {
-        "name": "Elisa Montemayor",
-        "position": "Global HR Professional"
-    },
-    {
         "name": "Patrick Culhane",
         "position": "Senior Sales Operations Program Associate at Uber"
-    },
-    {
-        "name": "Robert Hugh",
-        "position": "Slayer of Dragons"
     },
     {
         "name": "Nayan Jain",
@@ -2460,28 +1992,12 @@
         "position": "Global Executive Search at Uber"
     },
     {
-        "name": "Matthew Jacobson",
-        "position": "General Partner at ICONIQ Capital"
-    },
-    {
         "name": "Lauren Neville",
         "position": "Product at Uber"
     },
     {
-        "name": "LinkedIn Member",
-        "position": "Senior Software Engineer at Uber"
-    },
-    {
-        "name": "Scott G.",
-        "position": "Human Resources at Uber Freight and Uber Elevate"
-    },
-    {
         "name": "Alex Harris",
         "position": "Security Analyst I at Uber"
-    },
-    {
-        "name": "Jeff Deng",
-        "position": "Tech Lead & Software Engineer"
     },
     {
         "name": "Fei Wu",
@@ -2508,10 +2024,6 @@
         "position": "Senior Software Engineer at Uber"
     },
     {
-        "name": "Katie Luo",
-        "position": "Incoming CS PhD @ Cornell"
-    },
-    {
         "name": "Suneesha Kudipudi",
         "position": "Data Scientist at Uber"
     },
@@ -2528,16 +2040,8 @@
         "position": "Senior Software Engineer at Uber"
     },
     {
-        "name": "James Ormond",
-        "position": "Software Engineer | Basketball Coach & Trainer"
-    },
-    {
         "name": "Radhika Athalye",
         "position": "Data Engineer at Uber"
-    },
-    {
-        "name": "Ruofei (Sophie) Wang",
-        "position": "Product Management, Data Science, Growth Analytics"
     },
     {
         "name": "Kuang Han",
@@ -2550,10 +2054,6 @@
     {
         "name": "Sunny Kota",
         "position": "Product @ Uber, Google"
-    },
-    {
-        "name": "Vijay Kumar Manchuri",
-        "position": "Sr. Salesforce Developer & Technical Architect with 13x Certifications"
     },
     {
         "name": "Arvind K.",
@@ -2574,10 +2074,6 @@
     {
         "name": "Zichuan Wang",
         "position": "SWE @Uber"
-    },
-    {
-        "name": "Vikram Bodicherla",
-        "position": "Looking for Mobile Engineers in the Bay Area!"
     },
     {
         "name": "Kulvir Gahlawat",
@@ -2692,10 +2188,6 @@
         "position": "Sr. Staff Engineer at Uber"
     },
     {
-        "name": "Nishith Agarwal",
-        "position": "Engineering and Product lead"
-    },
-    {
         "name": "Himank Chaudhary",
         "position": "Senior Software Engineer II/TLM at Uber"
     },
@@ -2736,16 +2228,8 @@
         "position": "Staff Engineer at Uber (Product, Growth & Data)"
     },
     {
-        "name": "hao yan",
-        "position": "I'm hiring Engineering Managers and Engineers!"
-    },
-    {
         "name": "Sowmya Balakrishna",
         "position": "Data Scientist at Uber"
-    },
-    {
-        "name": "Amit Nene",
-        "position": "Machine Learning Platform | Tech Lead Manager"
     },
     {
         "name": "Ravi Tiruvury",
@@ -2756,24 +2240,12 @@
         "position": "Software Engineer at Uber"
     },
     {
-        "name": "Pan Pan",
-        "position": "What a journey"
-    },
-    {
         "name": "Arvind Srinivasan",
         "position": "Head of Product - Mobility Platforms at Uber"
     },
     {
         "name": "Hanxiong Zhang",
         "position": "Senior Software Engineer at Uber"
-    },
-    {
-        "name": "Chao (Kevin) Wang",
-        "position": "Senior Software Engineer"
-    },
-    {
-        "name": "Lili Kan",
-        "position": "Engineering Leader, Sharing-Economy Insurance"
     },
     {
         "name": "Han Chen",
@@ -2800,20 +2272,12 @@
         "position": "Senior Software Engineer at Uber"
     },
     {
-        "name": "Tajinder Singh",
-        "position": "Product Leader"
-    },
-    {
         "name": "Aditya Auradkar",
         "position": "Engineering Manager at Uber"
     },
     {
         "name": "Lei Lin",
         "position": "Senior Engineering Manager at Uber"
-    },
-    {
-        "name": "Suhas Kulkarni",
-        "position": "I am hiring"
     },
     {
         "name": "Qing Xu",
@@ -2860,10 +2324,6 @@
         "position": "Software Engineer II at Uber"
     },
     {
-        "name": "Rong Rong",
-        "position": "Software Engineer"
-    },
-    {
         "name": "Weisi Duan",
         "position": "Senior Software Engineer II at Uber"
     },
@@ -2888,10 +2348,6 @@
         "position": "Tech Lead Manager, Rider Intelligence at Uber - We're hiring!"
     },
     {
-        "name": "Sasankh Munukutla",
-        "position": "CS / AI @ Stanford | Kleiner Perkins Engineering Fellow 2020 | Vice President at CS+Social Good"
-    },
-    {
         "name": "Bobby Parikh",
         "position": "Director of Engineering at Uber"
     },
@@ -2900,20 +2356,12 @@
         "position": "Sr Engineering Manager at Uber"
     },
     {
-        "name": "Longzhang (Long) Tian",
-        "position": "Be your best self. Better journey together."
-    },
-    {
         "name": "Ersin Yumer",
         "position": "Staff Research Scientist at Uber ATG (hiring!)"
     },
     {
         "name": "Ajit Singh",
         "position": "Senior Staff Software Engineer at Uber"
-    },
-    {
-        "name": "Pradeep Mani",
-        "position": "Leadership | People | Products | Platform | Infrastructure"
     },
     {
         "name": "Anne Holler",
@@ -2948,14 +2396,6 @@
         "position": "Engineering Manager at Uber"
     },
     {
-        "name": "Chong Sun",
-        "position": "Staff Engineer, Manager"
-    },
-    {
-        "name": "Miles Smith",
-        "position": "Senior Software Engineer"
-    },
-    {
         "name": "kiran Jagadeesh",
         "position": "Senior Product Manager - Uber"
     },
@@ -2972,20 +2412,8 @@
         "position": "Senior Software Engineer at Uber - Data Visualization"
     },
     {
-        "name": "Ting Chen",
-        "position": "Keep Learning Engineer"
-    },
-    {
         "name": "Ruchi Jhaveri",
         "position": "Kellogg MBA 2017 | Deal Negotiations at Uber"
-    },
-    {
-        "name": "Stephen Huenneke",
-        "position": "Experienced Software Engineer"
-    },
-    {
-        "name": "Rahul Kalra",
-        "position": "Full-stack Developer at c0d3"
     },
     {
         "name": "Wallace Yan",
@@ -3024,10 +2452,6 @@
         "position": "Engineering Manager at Uber - hiring backend engineers to make Uber safe and secure"
     },
     {
-        "name": "Joey Isaacson",
-        "position": "Senior Product Designer at Uber Freight"
-    },
-    {
         "name": "Ankit Tandon",
         "position": "Group Product Manager at Uber | ex-Microsoft"
     },
@@ -3046,10 +2470,6 @@
     {
         "name": "Amanda Berton",
         "position": "Technical Recruiting at Uber"
-    },
-    {
-        "name": "Dilip P.",
-        "position": "Engineering Manager"
     },
     {
         "name": "Gaurav Bansal",
@@ -3096,10 +2516,6 @@
         "position": "Software Engineer at Uber"
     },
     {
-        "name": "Sara Potgeter",
-        "position": "Talent Partner passionate about improving DE&I in Tech with 9+ YOE focusing on Data Science and Analytics Recruiting"
-    },
-    {
         "name": "Vijay Kumar K S",
         "position": "Senior Software Engineer at Uber"
     },
@@ -3120,10 +2536,6 @@
         "position": "Technical Leader @Uber"
     },
     {
-        "name": "Badari Kalagi",
-        "position": "Actively looking for Product Security and Security Program Manager roles - in Security, Privacy, Compliance domains."
-    },
-    {
         "name": "Aditi Bhatt",
         "position": "Software Engineer at Uber"
     },
@@ -3140,23 +2552,15 @@
         "position": "Software Engineer @ Uber Payments"
     },
     {
-        "name": "Calvin Pappas",
-        "position": "Building Trust. One product at a time."
-    },
-    {
         "name": "Jason Ring",
         "position": "Senior Design Leadership at Uber"
-    },
-    {
-        "name": "Tarik Benaouda",
-        "position": "Inside Sales Representative at CloudKnox Security Inc"
     },
     {
         "name": "Deepak VP",
         "position": "Engineering Manager II @Uber"
     },
     {
-        "name": "Hameed \u062d\u0645\u064a\u062f Afssari \u0627\u0641\u0633\u0631\u06cc",
+        "name": "Hameed Hmyd Afssari fsry",
         "position": "Sr. Technical PM Lead @ Uber"
     },
     {
@@ -3168,20 +2572,8 @@
         "position": "Senior Software Engineer at Uber"
     },
     {
-        "name": "Xinran Li",
-        "position": "Actively seeking full-time positions in Data Analytics | Business Analytics | Marketing Analytics | Data Visualization"
-    },
-    {
         "name": "Evelyn (Gezhi) Liu",
         "position": "Senior Software Engineer at Uber"
-    },
-    {
-        "name": "Sundeep Jain",
-        "position": "Google Vice President Product Management"
-    },
-    {
-        "name": "Seoyeon Sobe Sim",
-        "position": "Software Engineer"
     },
     {
         "name": "Shilpa Murthy",
@@ -3202,10 +2594,6 @@
     {
         "name": "Zhenyu Zhao",
         "position": "Sr. Data Scientist II at Uber"
-    },
-    {
-        "name": "LinkedIn Member",
-        "position": "Software Engineer at Uber"
     },
     {
         "name": "Ankur Sarda",
@@ -3276,14 +2664,6 @@
         "position": "Staff Engineer and Engineering Manager @ Uber."
     },
     {
-        "name": "Hong Qian",
-        "position": "Staff Engineer at Lime"
-    },
-    {
-        "name": "Wei Sun",
-        "position": "software engineer"
-    },
-    {
         "name": "Edbert Chan",
         "position": "Senior Software Engineer at Uber"
     },
@@ -3348,10 +2728,6 @@
         "position": "Senior Data Scientist at Uber Marketplace"
     },
     {
-        "name": "Harshit Mittal",
-        "position": "\"\""
-    },
-    {
         "name": "Xiao Chen",
         "position": "Software Engineer II at Uber"
     },
@@ -3402,10 +2778,6 @@
     {
         "name": "Varalaxmi Raveendar",
         "position": "Product @ Uber | Ex-Yahoo"
-    },
-    {
-        "name": "Zhi LI",
-        "position": "Driver Surge Pricing - Tech Lead"
     },
     {
         "name": "Lei W.",
@@ -3468,14 +2840,6 @@
         "position": "Product Lead at Uber, ex-Accompany, ex-Google"
     },
     {
-        "name": "Gautam Kulkarni",
-        "position": "Software and Product Development"
-    },
-    {
-        "name": "Dharmin Parikh",
-        "position": "Building AI Products"
-    },
-    {
         "name": "Peter (Zhenqiu) Huang",
         "position": "Senior Software Engineer at Uber"
     },
@@ -3512,10 +2876,6 @@
         "position": "Engineering Manager II at Uber"
     },
     {
-        "name": "Roshan Naik",
-        "position": "Architecting high performance systems for Realtime Big Data processing."
-    },
-    {
         "name": "Aaron Sekhri",
         "position": "Product Manager, Go-To-Market at Uber ATG"
     },
@@ -3536,16 +2896,8 @@
         "position": "Director (Legal), Products, Platform & Services at Uber"
     },
     {
-        "name": "David Tran",
-        "position": "Senior Software Engineer, Investor, Advisor"
-    },
-    {
         "name": "Jesse Chou",
         "position": "Software @ Uber | Princeton CS, Statistics & Machine Learning"
-    },
-    {
-        "name": "Olivia Yu",
-        "position": "Engineering @ LinkedIn"
     },
     {
         "name": "Milton Lee",
@@ -3554,10 +2906,6 @@
     {
         "name": "Xinlin Peng",
         "position": "Senior Software Engineer at Uber"
-    },
-    {
-        "name": "Maksym Kysylov",
-        "position": "Senior Software Engineer, ML/Data/Backend"
     },
     {
         "name": "Richard Ludlow",
@@ -3570,14 +2918,6 @@
     {
         "name": "Steve Bauer",
         "position": "Software Engineer at Uber"
-    },
-    {
-        "name": "LinkedIn Member",
-        "position": "Sr. Software Engineer, Reliability Engineering, Uber"
-    },
-    {
-        "name": "Wasiur Rahman",
-        "position": "Software Engineer"
     },
     {
         "name": "Pankaj Gupta",
@@ -3620,28 +2960,12 @@
         "position": "Software Engineer at Uber"
     },
     {
-        "name": "Jakub T.",
-        "position": "Cloud Janitor"
-    },
-    {
         "name": "Shashank Devan",
         "position": "Senior Software Engineer at Uber"
     },
     {
         "name": "Manisha Mundhe",
         "position": "Engineering Lead in Communications Platform @ Uber"
-    },
-    {
-        "name": "Hetal Savaliya",
-        "position": "Software Engineer"
-    },
-    {
-        "name": "Venkata S Praveen Gorthy",
-        "position": "Engineering Lead"
-    },
-    {
-        "name": "David Good",
-        "position": "Sr. Manager, Rider Experience"
     },
     {
         "name": "Xiaojie Zhang",
@@ -3664,24 +2988,8 @@
         "position": "Research scientist at Uber"
     },
     {
-        "name": "Ming Lam",
-        "position": "Expert Software Development Manager | Enterprise | Cloud | People Collaborator"
-    },
-    {
         "name": "Frank Q.",
         "position": "Senior Software Engineer at Uber"
-    },
-    {
-        "name": "Hiren Panchasara",
-        "position": "Tech Lead Performance Engineering"
-    },
-    {
-        "name": "Erik Seaberg",
-        "position": "Senior Backend Engineer"
-    },
-    {
-        "name": "Venkata Sanath Muppalla",
-        "position": "Lead Software Engineer - Streaming Analytics"
     },
     {
         "name": "Rami Mawas",
@@ -3704,10 +3012,6 @@
         "position": "Senior Software Engineer at Uber"
     },
     {
-        "name": "Pawe\u0142 Kr\u00f3likowski",
-        "position": "Software Developer"
-    },
-    {
         "name": "Zach Singleton",
         "position": "Product Manager at Uber"
     },
@@ -3718,10 +3022,6 @@
     {
         "name": "Boldtulga Ganbaatar",
         "position": "Software Engineer at Uber"
-    },
-    {
-        "name": "David Maskasky",
-        "position": "Frontend Engineer at Uber Elevate"
     },
     {
         "name": "Andreas Nomikos",
@@ -3738,10 +3038,6 @@
     {
         "name": "Amit Bose",
         "position": "Senior Software Engineer at Uber Technologies LLC"
-    },
-    {
-        "name": "Volha Hancharova",
-        "position": "Software Developer | New Grad 2020"
     },
     {
         "name": "Adam Zethraeus",

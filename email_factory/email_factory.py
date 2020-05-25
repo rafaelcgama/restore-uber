@@ -8,6 +8,8 @@ class EmailFactory:
         :return: str
         """
         name = name.split()
+        if len(name) > 2:
+            return None
         first_name = name[1]
         last_name = name[2]
 

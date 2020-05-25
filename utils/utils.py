@@ -1,6 +1,7 @@
 import json
-from os import rename, listdir
-from os.path import isfile, exists, join
+from unidecode import unidecode
+from os.path import isfile, exists, join, isdir
+from os import rename, listdir, mkdir
 
 
 def write_file(data, file_pathname):
@@ -10,8 +11,9 @@ def write_file(data, file_pathname):
     :param file_pathname: str
     :return: Creates a JSON file
     """
-    with open(file_pathname, 'w', encoding='utf-8', ensure_ascii=False) as file:
-        json.dump(data, file, indent=4)
+    with open(file_pathname, 'w', encoding='utf-8') as file:
+        json.dump(data, file, ensure_ascii=False, indent=4)
+
 
 def open_file(file_pathname):
     """
@@ -21,7 +23,7 @@ def open_file(file_pathname):
     :return: Creates a JSON file
     """
     with open(file_pathname, 'r', encoding='utf-8') as file:
-        data = json.load(file, indent=4)
+        data = json.load(file)
 
     return data
 
@@ -55,6 +57,34 @@ def remove_duplicates(mylist):
             new_list.append(employee)
     return new_list
 
-def get_folder_files(pathname):
-    file_list = [f for f in listdir(pathname) if isfile(join(pathname, f))]
+
+def normalize_string(str_):
+    return unidecode(str_).lower()
+
+
+def get_folder_files(pathdir, file_types):
+    file_list = []
+    if exists(pathdir) and isdir(pathdir):
+        for file in listdir(pathdir):
+            file_pathname = join(pathdir, file)
+            if isfile(file_pathname):
+                for file_type in file_types:
+                    if file_type in normalize_string(file_pathname):
+                        file_list.append(file_pathname)
     return file_list
+
+
+def create_path(filename='', folder='', makedir=False, final=False):
+    """
+    Creates a new file_pathname
+    :param final: bool, optional, formats the pathname differently when the whole data extraction is completed
+    :return: a string with a new file_pathname
+    """
+    if final:
+        filename = filename.split('_page_')[0] + '.json'
+
+    elif makedir and not exists('../data_clean'):
+        mkdir('../data_clean')
+
+    file_path = join(folder, filename)
+    return file_path

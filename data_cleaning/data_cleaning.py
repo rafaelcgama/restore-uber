@@ -1,5 +1,4 @@
-import unidecode
-from utils import get_folder_files, open_file, rename_file
+from utils import get_folder_files, open_file, write_file, create_path, normalize_string
 
 class Conditions:
     """
@@ -12,28 +11,28 @@ class Conditions:
 
         def is_former(position):
             status = False
-            if 'uber' not in unidecode(position).lower() or 'ex-uber' in unidecode(position).lower():
+            if 'uber' not in normalize_string(position) or 'ex-uber' in normalize_string(position):
                 status = True
             return status
 
         def is_driver(position):
             status = False
-            if 'driver' or 'motorista' in unidecode(position).lower():
+            if 'driver' in normalize_string(position) or 'motorista' in normalize_string(position):
                 status = True
             return status
 
         def is_another_service(position):
             status = False
-            if 'uber air' in unidecode(position).lower() or \
-                    'uberair' in unidecode(position).lower() or \
-                    'freight' in unidecode(position).lower() or \
-                    'elevate' in unidecode(position).lower():
+            if 'uber air' in normalize_string(position) or \
+                    'uberair' in normalize_string(position) or \
+                    'freight' in normalize_string(position) or \
+                    'elevate' in normalize_string(position):
                 status = True
             return status
 
         if not is_former(position) and \
                 not is_driver(position) and \
-                not is_another_service():
+                not is_another_service(position):
             status = True
 
         return status
@@ -49,7 +48,7 @@ def clean_data(mylist):
     for employee in mylist:
         name = employee['name']
         position = employee['position']
-        if 'LinkedIn Member' in unidecode(name).lower():
+        if normalize_string(name) == 'linkedin member':
             continue
 
         if Conditions.meet_conditions(position):
@@ -59,8 +58,11 @@ def clean_data(mylist):
 
 
 if __name__ == '__main__':
-    file_list = get_folder_files('data')
+    file_list = get_folder_files('../data_raw', ['.json'])
     for file in file_list:
-        file_data = open_file(file)
-        file_data = clean_data(file_data)
-        rename_file(file_data, file, file + '_clean')
+        filepath = create_path(filename=file, makedir=True)
+        results = open_file(filepath)
+        file_data = clean_data(results)
+        new_filepath = filepath.replace('raw', 'clean')
+        write_file(file_data, new_filepath)
+        print('Finished data cleaning!')
