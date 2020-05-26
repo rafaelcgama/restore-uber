@@ -60,7 +60,7 @@ Number of results in each city:
 * [San Francisco](/data_collected/san_francisco.json): 940
 * [São Paulo](/data_collected/sao_paulo.json): 1000
 
-However, not all results were relevant for my purposes as many of my results no longer work at Uber among other things. So I went on to the process of [cleaning and exploring](data_analysis.ipynb) my dataset to come up with a more relevant employee list that would increase my chances of being helped while saving resources. Because the dataset is not complex, there wasn't much to so I wrote a little [script](data_cleaning/data_cleaning.py) to execute the following actions:
+However, not all results were relevant for my purposes as many of my results no longer work at Uber among other things. So I went on to the process of [cleaning and exploring](notebook/data_cleaning.ipynb) my dataset to come up with a more relevant employee list that would increase my chances of being helped while saving resources. Because the dataset is not complex, there wasn't much to do so I wrote a little [script](data_cleaning/data_cleaning.py) to execute the following actions:
 
 * **Search and remove duplicates**
 * **Remove all employees not currently employed at Uber**
@@ -68,7 +68,7 @@ However, not all results were relevant for my purposes as many of my results no 
 * **Remove all employees working in the capacity of a driver/motorista (portuguese)**
 * **Remove all employees working for Uber Eats and Uber Freight, UberAir, UberAIR / UberElevate and Uber Works**
 
-After cleaning the data, I was left with 764 employees (779 using pandas) from San Francisco and 585 employees for São Paulo(692 using pandas). The discrepancy in the results between using my script and pandas functions to clean the data got me a little intrigued but I decided to investigate that at a later time. Then, my next step was to develop a [email conscructor](email_factory/email_factory.py) that would return two emails per name, one in each format.
+After cleaning the data, I was left with 764 employees (779 using [pandas](https://pandas.pydata.org/)) from San Francisco and 585 employees for São Paulo (692 using pandas). The discrepancy between the results using my script and pandas got me a little intrigued but I decided to investigate that at a later time. Then, my next step was to develop a [email conscructor](email_factory/email_factory.py) that would return two emails per name, one in each format.
 
 
 
@@ -87,7 +87,7 @@ Because the content of my emails is exactly the same aside the person being addr
 
 <h2 style="text-align: center;"><span><i>Results</i></span></h2>
 
-I am still working on the project structure so I haven't started the emailing campaign as of this moment. Will be back soon with the outcome
+I am still deciding how I am going to proceed with the emailing campaign. I am leaning towards creating a dummy email to avoid relatiations to my personal one in case the server catches the bot. I'll come back when I get an outcome.
 
 
 
