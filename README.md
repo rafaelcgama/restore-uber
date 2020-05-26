@@ -60,7 +60,7 @@ Number of results in each city:
 * [San Francisco](/data_collected/san_francisco.json): 940
 * [São Paulo](/data_collected/sao_paulo.json): 1000
 
-However, not all results were relevant for my purposes as many of my results no longer work at Uber among other things. So I went on to the process of [cleaning and exploring](notebook/data_cleaning.ipynb) my dataset to come up with a more relevant employee list that would increase my chances of being helped while saving resources. Because the dataset is not complex, there wasn't much to do so I wrote a little [script](data_cleaning/data_cleaning.py) to execute the following actions:
+However, not all results were relevant for my purposes as many of my results no longer work at Uber among other things. So I went on to the process of [cleaning and exploring](notebooks/data_cleaning.ipynb) my dataset to come up with a more relevant employee list that would increase my chances of being helped while saving resources. Because the dataset is not complex, there wasn't much to do so I wrote a little [script](data_cleaning/data_cleaning.py) to execute the following actions:
 
 * **Search and remove duplicates**
 * **Remove all employees not currently employed at Uber**
