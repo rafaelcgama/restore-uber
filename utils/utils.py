@@ -4,14 +4,14 @@ from os.path import isfile, exists, join, isdir
 from os import rename, listdir, mkdir
 
 
-def write_file(data, file_pathname):
+def write_file(data, file_pathname, mode='w'):
     """
     Creates or overwrite a new file
     :param data: list() of dict()
     :param file_pathname: str
     :return: Creates a JSON file
     """
-    with open(file_pathname, 'w', encoding='utf-8') as file:
+    with open(file_pathname, mode, encoding='utf-8') as file:
         json.dump(data, file, ensure_ascii=False, indent=4)
 
 

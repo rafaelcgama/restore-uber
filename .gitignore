@@ -41,3 +41,6 @@ nosetests.xml
 #json
 #*.json
 /tests/
+/email_sender/debug.log
+/email_sender/sent_list.json
+/notebooks/test.ipynb

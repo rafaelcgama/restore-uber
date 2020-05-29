@@ -23,7 +23,7 @@ At this point, the smart move would have been to just change my phone number and
 
 <h2 style="text-align: center;"> <span><i>Dataset</i></span></h2>
 
-Uber doesn't really have a catalog or an API I could just pull their employees emails from so I had to get the data myself. I found through a friend that uber emails had two different formats, as shown in the example below:
+Uber doesn't really have a catalog or an API I could just pull their employees emails from so I had to get the data myself. I found through a [website](https://rocketreach.co/uber-email-format_b5ddab60f42e55aa) that Uber's emails have potentially 9 different formats. However 95% of all their emails use only 6 formats so I decided to use just them. There are as follow:
 
 
 Rafael Gama
@@ -31,7 +31,19 @@ Rafael Gama
 rafael@uber.com
 ```
 ```text
+gama@uber.com
+```
+```text
+rafaelgama@uber.com
+```
+```text
 rafaelg@uber.com
+```
+```text
+gamar@uber.com
+```
+```text
+rgama@uber.com
 ```
 
 Now I that knew Uber's email formats, all I needed was to get a list of employees first and last names and construct the emails. In order to do that, I developed a [crawler](crawler/crawler_linkedin.py) that goes to LinkedIn's people search section, selects a city and a company, and scrape all results.
@@ -68,7 +80,7 @@ However, not all results were relevant for my purposes as many of my results no 
 * **Remove all employees working in the capacity of a driver/motorista (portuguese)**
 * **Remove all employees working for Uber Eats and Uber Freight, UberAir, UberAIR / UberElevate and Uber Works**
 
-After cleaning the data, I was left with 764 employees (779 using [pandas](https://pandas.pydata.org/)) from San Francisco and 585 employees for São Paulo (692 using pandas). The discrepancy between the results using my script and pandas got me a little intrigued but I decided to investigate that at a later time. Then, my next step was to develop a [email conscructor](email_factory/email_factory.py) that would return two emails per name, one in each format.
+After cleaning the data, I was left with 764 employees (779 using [pandas](https://pandas.pydata.org/)) from San Francisco and 585 employees for São Paulo (692 using pandas). The discrepancy between the results using my script and pandas got me a little intrigued but I decided to investigate that at a later time. Then, my next step was to develop a [email conscructor](email_factory/email_factory.py) that would return 6 emails per name, one in each format.
 
 
 
@@ -82,7 +94,7 @@ Awwww, if it was only thas easy...There is still one challenge left to overcome:
 * **Linkedin's server can percieve my emails as a security threat**
 * **My provider (Gmail) has [email sending limits](https://support.google.com/a/answer/166852?hl=en) of their own**
 
-Because the content of my emails is exactly the same aside the person being addressed, they are in considerable risk of being flagged as spam. At the same time, if the emailing frequency is too high, it may trigger a security alert. The million dollar question is, how much is too much? Because I am not a expert in servers, I decided to be cautious and **randomly space out** the time between emails in **batches of 20 emails** every **15 minutes**, until it hit the **350 per day** threshold I stipulated.
+Because the content of my emails is exactly the same aside the person being addressed, they are in considerable risk of being flagged as spam. At the same time, if the emailing frequency is too high, it may trigger a security alert. The million dollar question is, how much is too much? Because I am not a expert in servers, I decided to be cautious and **randomly space out** the time between emails and send them in **batches of 20 emails** every **10 minutes**, until I hit **360 sent emails**, which was target I stipulated per day.
 
 
 <h2 style="text-align: center;"><span><i>Results</i></span></h2>
