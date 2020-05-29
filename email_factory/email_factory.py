@@ -7,11 +7,11 @@ class EmailFactory:
         :param mylist: str
         :return: str
         """
-        name = name.split()
-        if len(name) > 2:
+        name_mail = name.split()
+        if len(name_mail) > 2:
             return None
-        first_name = name[1]
-        last_name = name[2]
+        first_name = name_mail[0].lower()
+        last_name = name_mail[1].lower()
 
         email1 = f'{first_name}@{domain}.com'
         email2 = f'{first_name + last_name[0]}@{domain}.com'

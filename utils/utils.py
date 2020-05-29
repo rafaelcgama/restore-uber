@@ -63,6 +63,13 @@ def normalize_string(str_):
 
 
 def get_folder_files(pathdir, file_types):
+    """
+    Get files from a folder
+    :param pathdir: directory path of the folder
+    :param file_types: a list containing the types of files to be selected
+        Example: ['json, txt]'
+    :return: a list of pathnames
+    """
     file_list = []
     if exists(pathdir) and isdir(pathdir):
         for file in listdir(pathdir):

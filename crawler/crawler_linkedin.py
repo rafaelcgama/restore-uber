@@ -189,7 +189,7 @@ class LinkedInCrawler(Crawler):
                     sys.exit("LinkedIn flagged the crawler and blocked searches for a little while")
 
                 self.logger.info(f'Reattempting to collect employee data from page {page}')
-                return self.extract_page()
+                return self.extract_page(page)
             else:
                 self.logger.error(f'Failed to load an extract info from page number {page}')
 

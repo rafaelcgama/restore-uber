@@ -58,7 +58,7 @@ def clean_data(mylist):
 
 
 if __name__ == '__main__':
-    file_list = get_folder_files('../data_raw', ['.json'])
+    file_list = get_folder_files('../data_raw', ['json'])
     for file in file_list:
         filepath = create_path(filename=file, makedir=True)
         results = open_file(filepath)

@@ -1,4 +1,5 @@
 import os
+import sys
 import logging
 import smtplib
 from time import sleep
@@ -21,12 +22,15 @@ class EmailSender:
     """
 
     def __init__(self):
-        self.logger = logging.getLogger(__name__)
-        self.logger.level = 20
         self.MAX_TRIES = 5
+        self.logger = logging.getLogger(__name__)
         logging.basicConfig(
             format='[%(asctime)s] {%(filename)s:%(lineno)d} %(levelname)s: %(message)s',
-            datefmt='%d/%m/%Y %I:%M:%S %p', level=20)
+            datefmt='%d/%m/%Y %I:%M:%S %p',
+            level=20,
+        )
+        fh = logging.FileHandler('debug.log')
+        self.logger.addHandler(fh)
 
     @staticmethod
     def read_template(filename):
@@ -41,20 +45,21 @@ class EmailSender:
         return Template(template_file_content)
 
     def send_email(self, email_list):
-        message_template = self.read_template('uber.txt')
+        message_template = self.read_template('../uber.txt')
 
         # set up the SMTP server
         self.logger.info('Connecting to email server and logging in')
-        s = smtplib.SMTP(host='smtp.gmail.com', port=587)
-        s.starttls()
+        server = smtplib.SMTP(host='smtp.gmail.com', port=587)
+        server.starttls()
 
-        s.login(MY_USERNAME, PASSWORD)
+        server.login(MY_USERNAME, PASSWORD)
 
         batch_count = 1
         email_count = 1
         for person in email_list:
+            name = person['name']
             # Create two emails
-            person_emails = EmailFactory.email_constructor(person, 'uber')
+            person_emails = EmailFactory.email_constructor(name, 'uber')
             if person_emails is None:
                 continue
             for email in person_emails:
@@ -65,10 +70,10 @@ class EmailSender:
                     msg = MIMEMultipart()  # create a message object
 
                     # Add the person's name to the message template
-                    message = message_template.substitute(PERSON_NAME=person.title())
+                    message = message_template.substitute(PERSON_NAME=name.title())
 
                     # Setup the parameters of the message
-                    msg['From'] = os.environ.get('MY_ADDRESS')
+                    msg['From'] = MY_USERNAME
                     msg['To'] = email
                     msg['Subject'] = "Please help me restore my account"
 
@@ -77,7 +82,7 @@ class EmailSender:
 
                     # Send the message via the server set up earlier.
                     self.logger.info("Emailing {}".format(email))
-                    s.send_message(msg)
+                    server.send_message(msg)
                     del msg
 
                     self.logger.info(
@@ -87,20 +92,21 @@ class EmailSender:
                     if email_count == max_emails:
                         self.logger.info('Daily email target achieved')
                         break
-            else:
-                # Wait 15m before sending another batch
-                self.logger.info('Batch number {} completed. Waiting {}m until next batch is sent.'.format(batch_count,
-                                                                                                           time_gap / 60))
-                batch_count += 1
-                sleep(time_gap)
+
+                else:
+                    # Wait 15m before sending another batch
+                    self.logger.info('Batch number {} completed. Waiting {}m until next batch is sent.'.format(batch_count,
+                                                                                                               time_gap / 60))
+                    batch_count += 1
+                    sleep(time_gap)
 
         # Terminate the SMTP session and close the connection
         self.logger.info('Daily email target reached. Closing server connection')
-        s.quit()
+        server.quit()
 
 
 if __name__ == '__main__':
-    file_list = get_folder_files('data_clean')
+    file_list = get_folder_files('../data_clean', ['json'])
     for file in file_list:
         email_list = open_file(file)
         email_sender = EmailSender()
