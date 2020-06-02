@@ -44,3 +44,4 @@ nosetests.xml
 /email_sender/debug.log
 /email_sender/sent_list.json
 /notebooks/test.ipynb
+/email_sender/get_emails.py

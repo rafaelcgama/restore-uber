@@ -23,7 +23,7 @@ At this point, the smart move would have been to just change my phone number and
 
 <h2 style="text-align: center;"> <span><i>Dataset</i></span></h2>
 
-Uber doesn't really have a catalog or an API I could just pull their employees emails from so I had to get the data myself. I found through a [website](https://rocketreach.co/uber-email-format_b5ddab60f42e55aa) that Uber's emails have potentially 9 different formats. However 95% of all their emails use only 6 formats so I decided to use just them. There are as follow:
+Uber doesn't really have a catalog or an API I could just pull their employees emails from so I had to get the data myself. I noticed by exchanging emails with Uber that their emails had two different formats, as shown in the example below:
 
 
 Rafael Gama
@@ -31,19 +31,7 @@ Rafael Gama
 rafael@uber.com
 ```
 ```text
-gama@uber.com
-```
-```text
-rafaelgama@uber.com
-```
-```text
 rafaelg@uber.com
-```
-```text
-gamar@uber.com
-```
-```text
-rgama@uber.com
 ```
 
 Now I that knew Uber's email formats, all I needed was to get a list of employees first and last names and construct the emails. In order to do that, I developed a [crawler](crawler/crawler_linkedin.py) that goes to LinkedIn's people search section, selects a city and a company, and scrape all results.
@@ -80,7 +68,7 @@ However, not all results were relevant for my purposes as many of my results no 
 * **Remove all employees working in the capacity of a driver/motorista (portuguese)**
 * **Remove all employees working for Uber Eats and Uber Freight, UberAir, UberAIR / UberElevate and Uber Works**
 
-After cleaning the data, I was left with 764 employees (779 using [pandas](https://pandas.pydata.org/)) from San Francisco and 585 employees for São Paulo (692 using pandas). The discrepancy between the results using my script and pandas got me a little intrigued but I decided to investigate that at a later time. Then, my next step was to develop a [email conscructor](email_factory/email_factory.py) that would return 6 emails per name, one in each format.
+After cleaning the data, I was left with 764 employees (779 using [pandas](https://pandas.pydata.org/)) from San Francisco and 585 employees for São Paulo (692 using pandas). The discrepancy between the results using my script and pandas got me a little intrigued but I decided to investigate that at a later time. Then, my next step was to develop a [email conscructor](email_factory/email_factory.py) that returns 2 emails per name, one in each format.
 
 
 
@@ -99,8 +87,11 @@ Because the content of my emails is exactly the same aside the person being addr
 
 <h2 style="text-align: center;"><span><i>Results</i></span></h2>
 
-I am still deciding how I am going to proceed with the emailing campaign. I am leaning towards creating a dummy email to avoid relatiations to my personal one in case the server catches the bot. I'll come back when I get an outcome.
+The outcome of the project couldn't have been better. I ended up getting my account restored in the very first round of emails!!! 
 
+In the end, 168 emails were sent but only 31 reached its destination. I was expecting the conversion rate to be twice of that because I was only using 2 email formats per employee. After further investigation, I discovered that Uber uses a few other email [formats](https://rocketreach.co/uber-email-format_b5ddab60f42e55aa) so that explains why most of them were not delivered.
+
+So that's it! Mission accomplished!!! My account is back in business so now let's see if it remains that way this time...   
 
 
 <h2 style="text-align: center;"><span><i>Potential Improvements</i></span></h2>
