@@ -91,7 +91,7 @@ The outcome of the project couldn't have been better. I ended up getting my acco
 
 In the end, 168 emails were sent but only 31 reached its destination. I was expecting the conversion rate to be twice of that because I was only using 2 email formats per employee. After further investigation, I discovered that Uber uses a few other email [formats](https://rocketreach.co/uber-email-format_b5ddab60f42e55aa) so that explains why most of them were not delivered.
 
-So that's it! Mission accomplished!!! My account is back in business so now let's see if it remains that way this time...   
+So that's it! Mission accomplished!!! My account is back in business so let's see if will remais this way now...   
 
 
 <h2 style="text-align: center;"><span><i>Potential Improvements</i></span></h2>
