@@ -2,6 +2,7 @@ import json
 from unidecode import unidecode
 from os.path import isfile, exists, join, isdir
 from os import rename, listdir, mkdir
+from datetime import datetime
 
 
 def write_file(data, file_pathname, mode='w'):
@@ -17,8 +18,7 @@ def write_file(data, file_pathname, mode='w'):
 
 def open_file(file_pathname):
     """
-    Creates or overwrite a new file
-    :param data: list() of dict()
+    Opens a file
     :param file_pathname: str
     :return: Creates a JSON file
     """
@@ -81,7 +81,7 @@ def get_folder_files(pathdir, file_types):
     return file_list
 
 
-def create_path(filename='', folder='', makedir=False, final=False):
+def create_path(filename='', folder='', final=False):
     """
     Creates a new file_pathname
     :param final: bool, optional, formats the pathname differently when the whole data extraction is completed
@@ -90,8 +90,24 @@ def create_path(filename='', folder='', makedir=False, final=False):
     if final:
         filename = filename.split('_page_')[0] + '.json'
 
-    elif makedir and not exists('../data_clean'):
-        mkdir('../data_clean')
+    elif not exists(folder):
+        mkdir(folder)
 
-    file_path = join(folder, filename)
+    date = datetime.today().strftime('%Y-%m-%d')
+    file_path = join(folder, f'{date}_{filename}')
     return file_path
+
+
+# def update_database(mylist, mydb):
+#     fh = open('list.pkl', 'wb')
+#     pickle.dump(mydb, fh)
+#     fh.close()
+#
+#     fh = open('list.pkl', 'rb')
+#     links = pickle.load(fh)
+#     fh.close()
+#
+#     links.extend(mylist)
+#     fh = open('list.pkl', 'wb')
+#     pickle.dump(links, fh)
+#     fh.close()

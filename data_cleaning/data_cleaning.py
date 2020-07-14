@@ -1,5 +1,6 @@
 from utils import get_folder_files, open_file, write_file, create_path, normalize_string
 
+
 class Conditions:
     """
     Those are the conditions that the employee's position have to meet to be considered relevant
@@ -60,7 +61,7 @@ def clean_data(mylist):
 if __name__ == '__main__':
     file_list = get_folder_files('../data_raw', ['json'])
     for file in file_list:
-        filepath = create_path(filename=file, makedir=True)
+        filepath = create_path(filename=file, folder='../data_clean')
         results = open_file(filepath)
         file_data = clean_data(results)
         new_filepath = filepath.replace('raw', 'clean')

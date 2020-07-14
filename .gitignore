@@ -45,3 +45,7 @@ nosetests.xml
 /email_sender/sent_list.json
 /notebooks/test.ipynb
 /email_sender/get_emails.py
+crawler/crawler_linkedin_jobs.py
+data_in_progress/
+job_database.py
+jobs_raw/
