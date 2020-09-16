@@ -1,4 +1,5 @@
 import json
+import logging
 from unidecode import unidecode
 from os.path import isfile, exists, join, isdir
 from os import rename, listdir, mkdir
@@ -97,6 +98,15 @@ def create_path(filename='', folder='', final=False):
     file_path = join(folder, f'{date}_{filename}')
     return file_path
 
+
+def start_logger(name):
+    logger = logging.getLogger(name)
+    logger.level = 20
+    logging.basicConfig(
+        format='[%(asctime)s] {%(filename)s:%(lineno)d} %(levelname)s: %(message)s',
+        datefmt='%d/%m/%Y %I:%M:%S %p', level=20)
+
+    return logger
 
 # def update_database(mylist, mydb):
 #     fh = open('list.pkl', 'wb')
