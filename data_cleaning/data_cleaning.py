@@ -61,7 +61,7 @@ def clean_data(mylist):
 if __name__ == '__main__':
     file_list = get_folder_files('../data_raw', ['json'])
     for file in file_list:
-        filepath = create_path(filename=file, folder='../data_clean')
+        filepath = create_path(filename=file, folder='../data_cleaned')
         results = open_file(filepath)
         file_data = clean_data(results)
         new_filepath = filepath.replace('raw', 'clean')

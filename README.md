@@ -48,7 +48,7 @@ LinkedIn proved to be a worthy adversary and a particularly hard site to crawl. 
 * #### LinkedIn server reject a large series of requests from the same IP address in a given time period and suspends your ability to search for a few days. Also, the page rendering time would greatly vary between requests:
     To avoid using long sleep times, I tried to use Selenium's Wait module to dynamically wait for the page to load but had little success. The code was unstable and breaking all the time so I was forced to increase the sleep times to solve both problems.
 
-* #### LinkedIn is on the lookout t for scraper bot behavior patterns:
+* #### LinkedIn is on the lookout for bot behavior patterns:
     To reduce my chances of being flagged, I created and applied a set of functions that try to simulate human behavior by scrolling up and down and randomly clicking on profiles.
 
 

@@ -13,8 +13,13 @@ def write_file(data, file_pathname, mode='w'):
     :param file_pathname: str
     :return: Creates a JSON file
     """
-    with open(file_pathname, mode, encoding='utf-8') as file:
-        json.dump(data, file, ensure_ascii=False, indent=4)
+    if '.json' in file_pathname:
+        with open(file_pathname, mode, encoding='utf-8') as file:
+            json.dump(data, file, ensure_ascii=False, indent=4)
+
+    elif '.txt' in file_pathname:
+        with open(file_pathname, mode, encoding='utf-8') as file:
+            file.write(data)
 
 
 def open_file(file_pathname):
@@ -23,8 +28,13 @@ def open_file(file_pathname):
     :param file_pathname: str
     :return: Creates a JSON file
     """
-    with open(file_pathname, 'r', encoding='utf-8') as file:
-        data = json.load(file)
+    if '.json' in file_pathname:
+        with open(file_pathname, 'r', encoding='utf-8') as file:
+            data = json.load(file)
+
+    elif '.txt' in file_pathname:
+        with open(file_pathname, 'r') as file:
+            data = file.read()
 
     return data
 
