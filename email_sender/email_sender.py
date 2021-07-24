@@ -3,10 +3,10 @@ import logging
 import smtplib
 from time import sleep
 from string import Template
-from email_factory import EmailFactory
 from email.mime.text import MIMEText
-from utils import open_file, get_folder_files
+from email_factory import EmailFactory
 from email.mime.multipart import MIMEMultipart
+from utils import open_file, write_file, get_folder_files
 
 MY_USERNAME = os.getenv('USERNAME_EMAIL')
 PASSWORD = os.getenv('PASSWORD_EMAIL')
@@ -21,12 +21,16 @@ class EmailSender:
     """
 
     def __init__(self):
-        self.logger = logging.getLogger(__name__)
-        self.logger.level = 20
         self.MAX_TRIES = 5
+        self.logger = logging.getLogger(__name__)
         logging.basicConfig(
             format='[%(asctime)s] {%(filename)s:%(lineno)d} %(levelname)s: %(message)s',
-            datefmt='%d/%m/%Y %I:%M:%S %p', level=20)
+            datefmt='%d/%m/%Y %I:%M:%S %p',
+            level=20,
+        )
+        fh = logging.FileHandler('debug.log')
+        self.logger.addHandler(fh)
+        self.sent_list = []
 
     @staticmethod
     def read_template(filename):
@@ -40,35 +44,46 @@ class EmailSender:
 
         return Template(template_file_content)
 
-    def send_email(self, email_list):
-        message_template = self.read_template('uber.txt')
-
+    def log_in(self):
         # set up the SMTP server
         self.logger.info('Connecting to email server and logging in')
-        s = smtplib.SMTP(host='smtp.gmail.com', port=587)
-        s.starttls()
+        server = smtplib.SMTP(host='smtp.gmail.com', port=587)
+        server.starttls()
 
-        s.login(MY_USERNAME, PASSWORD)
+        server.login(MY_USERNAME, PASSWORD)
+        return server
+
+    def send_email(self, email_list):
+        message_template = self.read_template('../uber.txt')
+
+        server = self.log_in()
+
+        self.sent_list = open_file('sent_list.json')
 
         batch_count = 1
-        email_count = 1
+        email_count = 0
         for person in email_list:
+            name = person['name']
             # Create two emails
-            person_emails = EmailFactory.email_constructor(person, 'uber')
+            person_emails = EmailFactory.email_constructor(name, 'uber')
             if person_emails is None:
                 continue
-            for email in person_emails:
-                self.logger.info('Sending email {} from number {}'.format(email_count, batch_count))
 
-                if email_count % batch_size != 0:
+            for email in person_emails:
+                if email in self.sent_list:
+                    continue
+
+                if email_count != 0 and (email_count % batch_size != 0):
+                    self.logger.info(f'Sending email number {email_count}, batch number  {batch_count}')
 
                     msg = MIMEMultipart()  # create a message object
 
                     # Add the person's name to the message template
-                    message = message_template.substitute(PERSON_NAME=person.title())
+                    self.logger.info("Emailing {}".format(email))
+                    message = message_template.substitute(PERSON_NAME=name.title())
 
                     # Setup the parameters of the message
-                    msg['From'] = os.environ.get('MY_ADDRESS')
+                    msg['From'] = MY_USERNAME
                     msg['To'] = email
                     msg['Subject'] = "Please help me restore my account"
 
@@ -76,32 +91,54 @@ class EmailSender:
                     msg.attach(MIMEText(message, 'plain'))
 
                     # Send the message via the server set up earlier.
-                    self.logger.info("Emailing {}".format(email))
-                    s.send_message(msg)
+                    server.send_message(msg)
                     del msg
 
-                    self.logger.info(
-                        'Email number {} from batch number {} successfully sent'.format(email_count, batch_count))
-                    email_count += 1
+                    self.logger.info(f'Email number {email_count}, batch number {batch_count} successfully sent')
+                    self.sent_list.append(email)
+
                     sleep(5)
                     if email_count == max_emails:
                         self.logger.info('Daily email target achieved')
+                        write_file(self.sent_list, 'sent_list.json')
                         break
-            else:
-                # Wait 15m before sending another batch
-                self.logger.info('Batch number {} completed. Waiting {}m until next batch is sent.'.format(batch_count,
-                                                                                                           time_gap / 60))
-                batch_count += 1
-                sleep(time_gap)
+
+                elif email_count != 0 and (email_count % batch_size == 0):
+                    # Wait 10m before sending another batch
+                    self.logger.info(
+                        f'Batch number {batch_count} completed. Waiting {time_gap // 60}m before sending next batch')
+                    server.quit()
+                    batch_count += 1
+                    sleep(time_gap)
+                    server = self.log_in()
+
+                email_count += 1
 
         # Terminate the SMTP session and close the connection
         self.logger.info('Daily email target reached. Closing server connection')
-        s.quit()
+        write_file(self.sent_list, 'sent_list.json')
+        server.quit()
 
 
 if __name__ == '__main__':
-    file_list = get_folder_files('data_clean')
+    file_list = get_folder_files('../data_clean', ['json'])
     for file in file_list:
         email_list = open_file(file)
         email_sender = EmailSender()
         email_sender.send_email(email_list)
+
+        # Save sent_list manually
+        mylist = open_file('sent_list.json')
+        for person in email_list:
+            name = person['name']
+            print(name)
+            if "Vivek Mayasandra" in name:
+                write_file(mylist, 'sent_list.json')
+                quit()
+            person_emails = EmailFactory.email_constructor(name, 'uber')
+            if person_emails is None:
+                continue
+            for email in person_emails:
+                if email in mylist:
+                    continue
+                mylist.append(email)

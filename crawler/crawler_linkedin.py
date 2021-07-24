@@ -1,3 +1,4 @@
+import os
 import sys
 from random import randint
 from time import sleep, time
@@ -5,6 +6,8 @@ from unidecode import unidecode
 from crawler import Crawler
 from utils import write_file, rename_file, create_path
 
+MY_USERNAME = os.getenv('USERNAME_LINKEDIN')
+PASSWORD = os.getenv('PASSWORD_LINKEDIN')
 
 class LinkedInCrawler(Crawler):
     """
@@ -12,9 +15,9 @@ class LinkedInCrawler(Crawler):
     Allow any number of cities and company to be searched at the same time by including them in the
     self.cities and self.companies lists.
     """
-    def __init__(self, cities, companies):
+    def __init__(self):
         super().__init__()
-        self.all_employees = []
+        self.all_results = []
         self.page = 1
         self.url_page_result = ''
         self.preffix = ''
@@ -22,9 +25,8 @@ class LinkedInCrawler(Crawler):
         self.company = ''
         self.last_page = ''
         self.last_saved_file = ''
-        self.url_login = 'https://www.linkedin.com/login?fromSignIn=true'
-        self.cities = cities
-        self.companies = companies
+        self.url_base = 'https://www.linkedin.com'
+        self.url_login = self.url_base + '/login?fromSignIn=true'
         self.xpaths = {
             'location': {
                 'filter': './/button[contains(@aria-label,"Locations filter")]',
@@ -44,8 +46,37 @@ class LinkedInCrawler(Crawler):
                 'name': './/span[contains(@class, "actor-name")]',
                 'position': './/p[contains(@class,"t-black t-normal search-result__truncate")]'
 
+            },
+            'profile': {
+                'link': './/a[@data-control-name="search_srp_result"]'
             }
         }
+
+    def login(self, tries=0):
+        """
+        Logs in to the website
+        :param tries: int keeping track of the number of attempts to login
+        """
+        try:
+            self.logger.info(f'Attempting to login to {self.url_login}')
+            self.driver.get(self.url_login)
+            sleep(3)
+
+            self.driver.find_element_by_xpath('.//input[@id="username"]').clear()
+            self.driver.find_element_by_xpath('.//input[@id="username"]').send_keys(MY_USERNAME)
+            self.driver.find_element_by_xpath('.//input[@id="password"]').clear()
+            self.driver.find_element_by_xpath('.//input[@id="password"]').send_keys(PASSWORD)
+            self.driver.find_element_by_xpath('.//button[@type="submit"]').click()
+            sleep(2)
+            self.logger.info('Log in was successful')
+
+        except Exception as e:
+            self.logger.error('Login attempt failed', exc_info=True)
+            if tries < self.MAX_TRIES:
+                self.logger.info(f'Retrying to login...')
+                tries += 1
+                return self.login(tries)
+            raise Exception(f'Failure to login, {e}')
 
     def save_data(self, final=False):
         """
@@ -58,7 +89,7 @@ class LinkedInCrawler(Crawler):
         old_filepath = self.last_saved_file
         filename = f'{unidecode(city)}_{unidecode(company)}_page_{self.page}.json'
         new_filepath = create_path(filename=filename, folder='../data_in_progress')
-        data = self.all_employees
+        data = self.all_results
         if not len(old_filepath):
             write_file(data, new_filepath)
             self.logger.info(f"First file created - page{self.page}")
@@ -96,8 +127,8 @@ class LinkedInCrawler(Crawler):
         self.logger.info(f"City: {city}")
         self.logger.info('City selection: FINISHED')
 
-    def add_company(self, company):
-        """'''
+    def select_company(self, company):
+        """
         Add a company
         :param company: string, name of the company to be selected
         :return: null
@@ -108,7 +139,6 @@ class LinkedInCrawler(Crawler):
 
         self.insert_text(self.xpaths['company']['input_box'], company)
 
-        # self.wait_for_element(self.xpaths['company']['selection'])
         sleep(randint(1, 2))
         self.click(self.xpaths['company']['selection'].format(company))
         sleep(randint(1, 2))
@@ -127,7 +157,7 @@ class LinkedInCrawler(Crawler):
         urls = []
         employees_to_click = [employee_combox[randint(0, 9)] for _ in range(randint(1, 2))]
         for employee in employees_to_click:
-            url = self.get_attribute('.//a[@data-control-name="search_srp_result"]', 'href', element=employee)
+            url = self.get_attribute(self.xpaths['profile']['link'], 'href', element=employee)
             urls.append(url)
 
         for url in urls:
@@ -136,14 +166,14 @@ class LinkedInCrawler(Crawler):
             self.scroll_random()
             self.go_back_page()
 
-    def random_actions(self, employee_combox):
+    def random_actions(self, combox):
         """
         Executes different actions to try to simulate human behavior to try avoid being flagged as a crawler
-        :param employee_combox: list() of employees in one page result
+        :param combox: list() of employees in one page result
         :return: null
         """
         if self.page % 8 == 0:
-            self.click_random_profiles(employee_combox)
+            self.click_random_profiles(combox)
 
         elif self.page % 10 == 0 and self.page != 100:
             sleep(20)
@@ -164,19 +194,19 @@ class LinkedInCrawler(Crawler):
                 self.url_page_result = self.preffix + f'&page={page}'
                 self.driver.get(self.url_page_result)
                 sleep(randint(6, 10))
-                # Scroll all the way down so all employees are loaded for scrapping
-                self.scroll_end()
+            # Scroll all the way down so all employees are loaded for scrapping
+            self.scroll_end()
 
-            employee_combox = self.find_multiple_elements(self.xpaths['extract_data']['employee_combox'])
-            for employee in employee_combox:
-                name = self.get_text(employee, self.xpaths['extract_data']['name'])
-                position = self.get_text(employee, self.xpaths['extract_data']['position'])
-                self.all_employees.append({
-                    'name': unidecode(name),
-                    'position': unidecode(position)
+            results_combox = self.find_multiple_elements(self.xpaths['extract_data']['employee_combox'])
+            for result in results_combox:
+                info_one = self.get_text(result, self.xpaths['extract_data']['name'])
+                info_two = self.get_text(result, self.xpaths['extract_data']['position'])
+                self.all_results.append({
+                    'name': unidecode(info_one),
+                    'position': unidecode(info_two)
                 })
 
-            self.random_actions(employee_combox)
+            self.random_actions(results_combox)
 
             self.logger.info(f'Employee data from page number {page}: COMPLETED')
 
@@ -189,9 +219,9 @@ class LinkedInCrawler(Crawler):
                     sys.exit("LinkedIn flagged the crawler and blocked searches for a little while")
 
                 self.logger.info(f'Reattempting to collect employee data from page {page}')
-                return self.extract_page()
+                return self.extract_page(page)
             else:
-                self.logger.error(f'Failed to load an extract info from page number {page}')
+                self.logger.error(f'Failed to load and extract info from page number {page}')
 
     def get_employees_info(self, num_pages=None):
         """
@@ -216,19 +246,21 @@ class LinkedInCrawler(Crawler):
 
         self.save_data()
         self.logger.info('Employee data extraction: FINISHED')
-        return self.all_employees
+        return self.all_results
 
-    def get_data(self, num_pages=None, tries=0):
+    def get_data(self, cities, companies, num_pages=None, tries=0):
         """
-        Main function that orchestrate the workflow of the data collection
+        Main function that orchestrates the workflow of the data collection
+        :param cities: list, cities to be searched
+        :param companies: list, companies to be searched
         :param tries: int, number of tries the crawler should be initiated in case of failure
-        :param num_pages: int, optional, if the user doesn't want to run a full collection, pick a number of pages
+        :param num_pages: int, optional, if the user doesn't want to run a full collection, pick the number of pages
                           to be searched
         :return: list() of dict() containing the name and position of all the employees from each search
         """
         try:
             start_time = time()
-            data = []
+            mydata = []
             # Keep collecting in case of error
             if self.page != 1:
                 self.login()
@@ -236,7 +268,7 @@ class LinkedInCrawler(Crawler):
                     self.get_employees_info()
                     self.save_data()
 
-            for i, city in enumerate(self.cities):
+            for i, city in enumerate(cities):
                 self.login()
                 # Go to people search page
                 self.click('.//div[@id="global-nav-typeahead"]')
@@ -247,29 +279,28 @@ class LinkedInCrawler(Crawler):
                 self.select_city(city)
                 self.city = city
 
-                for company in self.companies:
-                    self.add_company(company)
+                for company in companies:
+                    self.select_company(company)
                     self.company = company
 
                     employee_info_in_city = self.get_employees_info(num_pages)
                     self.save_data(final=True)
-                    data.append(employee_info_in_city)
+                    mydata.append(employee_info_in_city)
 
                     self.page = 1
-                    self.all_employees = []
+                    self.all_results = []
                     self.driver.close()
 
-                    total = time() - start_time
-                    self.logger.info(f"Data collection for city{city} and company{company}completed in {int(total)} seconds")
+                    self.logger.info(f"Data collection for city{city} and company{company}completed in {int(time() - start_time)} seconds")
 
-            return data
+            return mydata
 
         except Exception as e:
             self.logger.info(e, f'Error collecting employee data from all cities')
             if tries < self.MAX_TRIES:
                 tries += 1
                 self.logger.info(f'Reattempting data collection...')
-                return self.get_data()
+                return self.get_data(cities, companies, tries, num_pages)
             else:
                 self.save_data()
                 self.logger.error('Failure to complete data collection')
@@ -281,9 +312,9 @@ if __name__ == '__main__':
 
     cities = ['São Paulo', 'San Francisco']
     company = ['Uber']
-    crawler = LinkedInCrawler(cities, company)
+    crawler = LinkedInCrawler()
     # if you do not want to run all page results pick the number(int) you desire and insert as a param in the get_data()
-    data = crawler.get_data()
+    data = crawler.get_data(cities, company)
 
     total = time() - start
     crawler.logger.info(f"Data collection for all selected companies in all selected cities completed")

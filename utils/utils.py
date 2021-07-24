@@ -1,29 +1,40 @@
 import json
+import logging
 from unidecode import unidecode
 from os.path import isfile, exists, join, isdir
 from os import rename, listdir, mkdir
+from datetime import datetime
 
 
-def write_file(data, file_pathname):
+def write_file(data, file_pathname, mode='w'):
     """
     Creates or overwrite a new file
     :param data: list() of dict()
     :param file_pathname: str
     :return: Creates a JSON file
     """
-    with open(file_pathname, 'w', encoding='utf-8') as file:
-        json.dump(data, file, ensure_ascii=False, indent=4)
+    if '.json' in file_pathname:
+        with open(file_pathname, mode, encoding='utf-8') as file:
+            json.dump(data, file, ensure_ascii=False, indent=4)
+
+    elif '.txt' in file_pathname:
+        with open(file_pathname, mode, encoding='utf-8') as file:
+            file.write(data)
 
 
 def open_file(file_pathname):
     """
-    Creates or overwrite a new file
-    :param data: list() of dict()
+    Opens a file
     :param file_pathname: str
     :return: Creates a JSON file
     """
-    with open(file_pathname, 'r', encoding='utf-8') as file:
-        data = json.load(file)
+    if '.json' in file_pathname:
+        with open(file_pathname, 'r', encoding='utf-8') as file:
+            data = json.load(file)
+
+    elif '.txt' in file_pathname:
+        with open(file_pathname, 'r') as file:
+            data = file.read()
 
     return data
 
@@ -63,6 +74,13 @@ def normalize_string(str_):
 
 
 def get_folder_files(pathdir, file_types):
+    """
+    Get files from a folder
+    :param pathdir: directory path of the folder
+    :param file_types: a list containing the types of files to be selected
+        Example: ['json, txt]'
+    :return: a list of pathnames
+    """
     file_list = []
     if exists(pathdir) and isdir(pathdir):
         for file in listdir(pathdir):
@@ -74,7 +92,7 @@ def get_folder_files(pathdir, file_types):
     return file_list
 
 
-def create_path(filename='', folder='', makedir=False, final=False):
+def create_path(filename='', folder='', final=False):
     """
     Creates a new file_pathname
     :param final: bool, optional, formats the pathname differently when the whole data extraction is completed
@@ -83,8 +101,33 @@ def create_path(filename='', folder='', makedir=False, final=False):
     if final:
         filename = filename.split('_page_')[0] + '.json'
 
-    elif makedir and not exists('../data_clean'):
-        mkdir('../data_clean')
+    elif not exists(folder):
+        mkdir(folder)
 
-    file_path = join(folder, filename)
+    date = datetime.today().strftime('%Y-%m-%d')
+    file_path = join(folder, f'{date}_{filename}')
     return file_path
+
+
+def start_logger(name):
+    logger = logging.getLogger(name)
+    logger.level = 20
+    logging.basicConfig(
+        format='[%(asctime)s] {%(filename)s:%(lineno)d} %(levelname)s: %(message)s',
+        datefmt='%d/%m/%Y %I:%M:%S %p', level=20)
+
+    return logger
+
+# def update_database(mylist, mydb):
+#     fh = open('list.pkl', 'wb')
+#     pickle.dump(mydb, fh)
+#     fh.close()
+#
+#     fh = open('list.pkl', 'rb')
+#     links = pickle.load(fh)
+#     fh.close()
+#
+#     links.extend(mylist)
+#     fh = open('list.pkl', 'wb')
+#     pickle.dump(links, fh)
+#     fh.close()
