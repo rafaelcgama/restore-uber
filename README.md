@@ -106,11 +106,11 @@ Not quite yet...
 
 - **Spam Filters:** Identical bulk messages are spam-filter bait — change too little, and you’re flagged instantly.
 - **Gmail Limits:** Gmail enforces strict daily caps; see [Gmail’s sending limits](https://support.google.com/a/answer/166852?hl=en).
-- **Security Flags:** oo much “unusual activity” and Google starts thinking you’re a bot — or worse, a marketer.
+- **Security Flags:** too much “unusual activity” and Google starts thinking you’re a bot — or worse, a marketer.
 
 ---
 
-### My Strategy:
+### My Rate Limite Strategy:
 
 - Send in **batches of 20 emails**
 - Introduce **random time delays**
@@ -156,8 +156,8 @@ A lightweight orchestrator like Prefect, Luigi, or Airflow would let the process
 
 ## Final Thoughts
 
-What started as a small act of stubbornness turned into a full-blown automation pipeline.
+What started as a small act of stubbornness an defiance turned into a full-blown automation pipeline.
 It was unnecessary, slightly obsessive, and definitely not the most efficient solution — but it worked.
 
-My Uber account is back.
+My Uber account is back and working as of 10/12/2025.
 Let’s see how long it stays that way!
