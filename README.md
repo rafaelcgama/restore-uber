@@ -148,7 +148,7 @@ Implement rotating IPs, headers, and user agents to distribute requests and redu
 * **Audit data cleaning logic**:
 The mismatch between my script and Pandas still bugs me. Proper unit tests or a deterministic cleaning pipeline would fix that.
 
-* **Introduce workflow orchestration*:
+* **Introduce workflow orchestration**:
 A lightweight orchestrator like Prefect, Luigi, or Airflow would let the process recover from partial failures and make it reproducible — not just “Raff’s cursed cron job that somehow works.”
 
 ---
