@@ -135,28 +135,27 @@ I expected better delivery rates, but later discovered Uber uses multiple email 
 
 This was a quick, impulsive hack that somehow evolved into a working system. If I ever revisited it, here’s how I’d make it smarter, faster, and far more sustainable:
 
-- Replace brute-force sleeps with smart waits:
+* **Replace brute-force sleeps with smart waits**:
 Use explicit Selenium conditions or event hooks to make the scraper reactive instead of time-dependent.
 (“Sleep(5)” may work, but it’s the duct tape of automation.)
 
-- Parallelize the crawler:
-Split LinkedIn searches by city or alphabet range and run them concurrently using threads or asyncio. Faster collection, same headache.
+* **Parallelize the crawler**:
+Run the LinkedIn scrapers for both cities simultaneously using threads or asyncio, so their data is collected in parallel instead of sequentially. Twice the speed, same chaos.
 
-- Add proxy rotation:
+* **Add proxy rotation**:
 Implement rotating IPs, headers, and user agents to distribute requests and reduce detection risk.
 
-
-- Audit data cleaning logic:
+* **Audit data cleaning logic**:
 The mismatch between my script and Pandas still bugs me. Proper unit tests or a deterministic cleaning pipeline would fix that.
 
-- Introduce workflow orchestration:
+* **Introduce workflow orchestration*:
 A lightweight orchestrator like Prefect, Luigi, or Airflow would let the process recover from partial failures and make it reproducible — not just “Raff’s cursed cron job that somehow works.”
 
 ---
 
 ## Final Thoughts
 
-What started as a small act of stubbornness an defiance turned into a full-blown automation pipeline.
+What started as a small act of stubbornness and defiance turned into a full-blown automation pipeline.
 It was unnecessary, slightly obsessive, and definitely not the most efficient solution — but it worked.
 
 My Uber account is back and working as of 10/12/2025.
