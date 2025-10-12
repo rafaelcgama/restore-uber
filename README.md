@@ -1,6 +1,6 @@
 # Operation Restore Uber Account
 
-> **Disclaimer:** This crawler was operational as of **05/18/2020**.  
+> **Disclaimer:** This crawler was operational as of **05/18/2020**.
 > Built purely as a personal experiment — not affiliated with Uber or LinkedIn.
 
 <div align="center">
@@ -43,16 +43,21 @@ With this pattern in hand, all I needed was a list of employees’ names. I crea
 
 ## Crawler Development
 
-Crawling LinkedIn is no easy feat. Here were the core challenges and how I tackled them:
+Crawling LinkedIn is a small war of attrition. Here’s what went wrong — and how I duct-taped it into working:
 
 - **JavaScript Rendering:**  
-  LinkedIn search results are rendered with JavaScript. So I used [Selenium](https://selenium-python.readthedocs.io/) instead of `requests`.
+  LinkedIn loads everything dynamically, so static scraping with requests was useless.
+I switched to Selenium, which could at least *pretend* to be human.
 
 - **Rate Limiting & Bans:**  
-  Too many requests from the same IP will get you blocked. I initially tried dynamic waits via `WebDriverWait`, but instability forced me to fallback to longer, static sleep intervals.
+  Hit LinkedIn too fast and you’re done.
+  I tried clever dynamic waits with WebDriverWait, but reliability tanked — so I surrendered to long, static sleep() calls. Crude, but effective.
+
 
 - **Anti-Bot Detection:**  
-  To avoid detection, I added human-like behaviors — like scrolling, random delays, and occasional clicks.
+  To look less like a bot, I made the crawler behave more like an impatient intern — random scrolling, unpredictable pauses, and the occasional useless click.
+
+  It wasn’t elegant. But it survived long enough to get the data.
 
 ---
 
@@ -63,7 +68,10 @@ Raw results by city:
 - [San Francisco](/data_collected/san_francisco.json): 940
 - [São Paulo](/data_collected/sao_paulo.json): 1000
 
-I then ran a custom [data cleaning script](data_cleaning/data_cleaning.py) to refine the dataset and discard irrelevant entries.
+Of course, most of that was noise — ex-employees, recruiters, and “LinkedIn Members” with no visible name.
+So I ran a custom [data cleaning script](data_cleaning/data_cleaning.py) to refine the dataset and discard irrelevant entries.
+
+The result: fewer rows, more signal, and slightly less chaos — a cleaner, sharper list of people actually worth emailing.
 
 ### Cleaning Steps:
 
@@ -79,24 +87,28 @@ I then ran a custom [data cleaning script](data_cleaning/data_cleaning.py) to re
 | San Francisco | 764       | 779    |
 | São Paulo     | 585       | 692    |
 
->The discrepancy between my script and Pandas intrigued me, but I saved it for another day.
+The discrepancy between my script and Pandas intrigued me - but that's a mystery for another day
 
-Next, I created an [email constructor](email_factory/email_factory.py) to generate two address variants per employee.
+Next, I built an [email constructor](email_factory/email_factory.py) to generate two possible address formats per employee. One of them had to hit someone’s inbox.
 
 ---
 
 ## Execution Strategy
 
-With the emails generated, I plugged them into the [email sender script](email_sender/email_sender.py).  
-Now all I had to do was hit “send,” right?
+Once the emails were ready, I fed them into the [email sender script](email_sender/email_sender.py).
+At that point, it should’ve been as simple as hitting “Send.”, right?!
 
-Not quite…
+Not quite yet...
+
+---
 
 ### Emailing Constraints:
 
-- **Spam Filters:** Bulk identical messages trigger spam detectors.
-- **Gmail Limits:** See [Gmail’s sending limits](https://support.google.com/a/answer/166852?hl=en).
-- **Security Flags:** Unusual activity might trigger account suspension.
+- **Spam Filters:** Identical bulk messages are spam-filter bait — change too little, and you’re flagged instantly.
+- **Gmail Limits:** Gmail enforces strict daily caps; see [Gmail’s sending limits](https://support.google.com/a/answer/166852?hl=en).
+- **Security Flags:** oo much “unusual activity” and Google starts thinking you’re a bot — or worse, a marketer.
+
+---
 
 ### My Strategy:
 
@@ -104,7 +116,7 @@ Not quite…
 - Introduce **random time delays**
 - Cap at **360 emails per day**
 
-This approach helped avoid spam filters while keeping the process steady and under the radar.
+This approach added just enough randomness to dodge spam filters while staying safely under Gmail’s radar.
 
 ---
 
@@ -113,11 +125,7 @@ This approach helped avoid spam filters while keeping the process steady and und
 **Success.**  
 My account was reactivated after the **first batch** of emails.
 
-### Stats:
-
-- Emails sent: **168**
-- Delivered: **31**
-- Conversion: Account restored
+## Stats:
 
 I expected better delivery rates, but later discovered Uber uses multiple email formats beyond the two I implemented. See this [reference](https://rocketreach.co/uber-email-format_b5ddab60f42e55aa) for more variations.
 
@@ -125,18 +133,30 @@ I expected better delivery rates, but later discovered Uber uses multiple email 
 
 ## Potential Improvements
 
-This was a fast-and-dirty pet project. But several ideas came to mind for making it more scalable and robust:
+This was a quick, impulsive hack that somehow evolved into a working system. If I ever revisited it, here’s how I’d make it smarter, faster, and far more sustainable:
 
-- Reduce `sleep()` time using smarter waits
-- Parallelize scraping across threads or processes
-- Use proxy rotation to bypass rate limits
-- Investigate the data cleaning discrepancies
-- Refactor to use a workflow manager (e.g. Airflow, Prefect) for recovery and modularity
+- Replace brute-force sleeps with smart waits:
+Use explicit Selenium conditions or event hooks to make the scraper reactive instead of time-dependent.
+(“Sleep(5)” may work, but it’s the duct tape of automation.)
+
+- Parallelize the crawler:
+Split LinkedIn searches by city or alphabet range and run them concurrently using threads or asyncio. Faster collection, same headache.
+
+- Add proxy rotation & fingerprinting:
+Cycle through IPs, headers, and user agents to look less like a robot with insomnia.
+
+- Audit data cleaning logic:
+The mismatch between my script and Pandas still bugs me. Proper unit tests or a deterministic cleaning pipeline would fix that.
+
+- Introduce workflow orchestration:
+A lightweight orchestrator like Prefect or Airflow would let the process recover from partial failures and make it reproducible — not just “Alan’s cursed cron job that somehow works.”
 
 ---
 
 ## Final Thoughts
 
-What began as a small act of stubbornness turned into a full-blown automation pipeline. It was a ridiculous workaround — but it worked. And now I have my Uber account back.
+What started as a small act of stubbornness turned into a full-blown automation pipeline.
+It was unnecessary, slightly obsessive, and definitely not the most efficient solution — but it worked.
 
-Let’s see if it stays that way.
+My Uber account is back.
+Let’s see how long it stays that way!
