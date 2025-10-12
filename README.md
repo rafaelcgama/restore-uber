@@ -142,14 +142,15 @@ Use explicit Selenium conditions or event hooks to make the scraper reactive ins
 - Parallelize the crawler:
 Split LinkedIn searches by city or alphabet range and run them concurrently using threads or asyncio. Faster collection, same headache.
 
-- Add proxy rotation & fingerprinting:
-Cycle through IPs, headers, and user agents to look less like a robot with insomnia.
+- Add proxy rotation:
+Implement rotating IPs, headers, and user agents to distribute requests and reduce detection risk.
+
 
 - Audit data cleaning logic:
 The mismatch between my script and Pandas still bugs me. Proper unit tests or a deterministic cleaning pipeline would fix that.
 
 - Introduce workflow orchestration:
-A lightweight orchestrator like Prefect or Airflow would let the process recover from partial failures and make it reproducible — not just “Alan’s cursed cron job that somehow works.”
+A lightweight orchestrator like Prefect, Luigi, or Airflow would let the process recover from partial failures and make it reproducible — not just “Raff’s cursed cron job that somehow works.”
 
 ---
 
