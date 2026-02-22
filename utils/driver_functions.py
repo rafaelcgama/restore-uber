@@ -14,32 +14,33 @@ class DriverFunctions:
         # chrome_options.add_argument('--headless')
         chrome_options.add_argument("--start-maximized")
         # chrome_options.add_argument('--no-sandbox')
-        driver = webdriver.Chrome(chrome_options=chrome_options)
-        # driver.implicitly_wait(1)
+        driver = webdriver.Chrome(options=chrome_options)
         self.driver_ready(driver)
-
         return driver
 
     @staticmethod
     def driver_ready(driver):
         WebDriverWait(driver, 10).until(
-            lambda driver: driver.execute_script('return document.readyState') == 'complete')
+            lambda d: d.execute_script('return document.readyState') == 'complete'
+        )
 
-    def wait_for_element(self, xpath):
-        WebDriverWait(self.driver, 120).until(EC.presence_of_element_located((By.XPATH, xpath)))
+    def wait_for_element(self, xpath: str):
+        WebDriverWait(self.driver, 120).until(
+            EC.presence_of_element_located((By.XPATH, xpath))
+        )
 
     def scroll_end(self):
-        self.driver.find_element_by_tag_name('body').send_keys(Keys.END)
+        self.driver.find_element(By.TAG_NAME, 'body').send_keys(Keys.END)
         sleep(randint(1, 2))
 
     def scroll_home(self):
-        self.driver.find_element_by_tag_name('body').send_keys(Keys.HOME)
+        self.driver.find_element(By.TAG_NAME, 'body').send_keys(Keys.HOME)
 
-    def scroll_up(self, pixels):
+    def scroll_up(self, pixels: int):
         self.driver.execute_script(f"scrollBy(0,+{pixels});")
         sleep(randint(1, 2))
 
-    def scroll_down(self, pixels):
+    def scroll_down(self, pixels: int):
         self.driver.execute_script(f"scrollBy(0,{pixels});")
         sleep(randint(1, 2))
 
@@ -63,33 +64,30 @@ class DriverFunctions:
         self.driver.execute_script("window.history.go(-1)")
         sleep(randint(2, 3))
 
-    def click(self, xpath):
-        self.driver.find_element_by_xpath(xpath).click()
+    def click(self, xpath: str):
+        self.driver.find_element(By.XPATH, xpath).click()
 
-    def clear_field(self, xpath):
-        self.driver.find_element_by_xpath(xpath).clear()
+    def clear_field(self, xpath: str):
+        self.driver.find_element(By.XPATH, xpath).clear()
 
-    def insert_text(self, xpath, word):
+    def insert_text(self, xpath: str, word: str):
         self.clear_field(xpath)
-        self.driver.find_element_by_xpath(xpath).send_keys(word)
+        self.driver.find_element(By.XPATH, xpath).send_keys(word)
 
-    def get_text(self, element, xpath):
-        return element.find_element_by_xpath(xpath).text
+    def get_text(self, element, xpath: str) -> str:
+        return element.find_element(By.XPATH, xpath).text
 
-    def find_multiple_elements(self, xpath, element=None):
+    def find_multiple_elements(self, xpath: str, element=None):
         if element is None:
-            return self.driver.find_elements_by_xpath(xpath)
-        else:
-            return element.find_elements_by_xpath(xpath)
+            return self.driver.find_elements(By.XPATH, xpath)
+        return element.find_elements(By.XPATH, xpath)
 
-    def find_element(self, xpath, element=None):
+    def find_element(self, xpath: str, element=None):
         if element is None:
-            return self.driver.find_element_by_xpath(xpath)
-        else:
-            return element.find_element_by_xpath(xpath)
+            return self.driver.find_element(By.XPATH, xpath)
+        return element.find_element(By.XPATH, xpath)
 
-    def get_attribute(self, xpath, attrib, element=None):
+    def get_attribute(self, xpath: str, attrib: str, element=None) -> str:
         if element is None:
-            return self.driver.find_element_by_xpath(xpath).get_attribute(attrib)
-        else:
-            return element.find_element_by_xpath(xpath).get_attribute(attrib)
+            return self.driver.find_element(By.XPATH, xpath).get_attribute(attrib)
+        return element.find_element(By.XPATH, xpath).get_attribute(attrib)

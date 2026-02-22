@@ -1,6 +1,9 @@
-FROM python:3.7.7
+FROM python:3.11-slim
 
 WORKDIR /usr/src/app
+
+# Copy environment variable template — rename to .env and fill in your credentials
+# cp .env .env && nano .env
 
 ENV USERNAME_LINKEDIN='your_linkedin_account'
 ENV PASSWORD_LINKEDIN='your_linkedin_password'

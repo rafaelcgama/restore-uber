@@ -1,63 +1,72 @@
 # Operation Restore Uber Account
 
+![Python](https://img.shields.io/badge/Python-3.11-3776AB?logo=python&logoColor=white)
+![Selenium](https://img.shields.io/badge/Selenium-4.18-43B02A?logo=selenium&logoColor=white)
+![Last Working](https://img.shields.io/badge/Last%20Working-May%202020-orange)
+![Status](https://img.shields.io/badge/Status-Educational%20Archive-lightgrey)
+
 > **Disclaimer:** This crawler was operational as of **05/18/2020**.
 > Built purely as a personal experiment — not affiliated with Uber or LinkedIn.
 
 <div align="center">
-  <img src="/images/uber_disabled.jpeg" width="400">
+  <img src="images/uber_disabled.jpeg" width="400" alt="Uber account disabled screen">
 </div>
 
 ---
 
 ## Objective
 
-The goal of this project was to build a crawler to scrape LinkedIn for all Uber employees located in **San Francisco** and **São Paulo**, and then **mass-email** them a letter — hoping that someone, somewhere, would be customer-oriented enough to help reactivate my Uber account.
+Build a scraper to collect LinkedIn profiles of Uber employees in **San Francisco** and **São Paulo**, then mass-email them asking for help reactivating a permanently disabled account.
 
 ---
 
 ## Background
 
-This project was born out of frustration. After my Uber account was repeatedly blocked without explanation — and after enduring multiple back-and-forths with customer support who called it a "glitch" every time — my account was suddenly **permanently disabled**.
+After my Uber account was repeatedly blocked without explanation — and after enduring multiple back-and-forths with customer support who called it a "glitch" every time — my account was suddenly **permanently disabled**.
 
 Uber stopped responding. No warnings, no explanations.
 
-Now, the rational move would’ve been to just create a new account with a different phone number. But after everything, I refused to give in. Instead, I had the "brilliant idea" to pour even **more time and energy** into a technical workaround… and this is the result.
+The rational move would've been to create a new account with a different phone number. Instead, I poured even **more time and energy** into building a technical workaround. This is the result.
 
 If you want the full story, check out the [email I sent them](uber.txt).
 
 ---
 
+## Architecture
+
+![Architecture Diagram](images/architecture.png)
+
+---
+
 ## Dataset Construction
 
-Uber doesn’t offer an API or public employee directory. But based on prior emails exchanged with Uber, I noticed two common email formats:
+Uber has no public employee directory or API. Based on prior emails from Uber, I identified two common email formats for an employee named **John Doe**:
 
-**Example: John Doe**
-
+```
 john@uber.com
-
 johnd@uber.com
+```
 
-With this pattern in hand, all I needed was a list of employees’ names. I created a [crawler](crawler/crawler_linkedin.py) that performs a LinkedIn search by city and company, then scrapes the list of employee profiles.
+With this pattern, all I needed was a list of names. The [crawler](crawler/crawler_linkedin.py) performs a LinkedIn People search filtered by city and company, scraping names and job titles from the results.
 
 ---
 
 ## Crawler Development
 
-Crawling LinkedIn is a small war of attrition. Here’s what went wrong — and how I duct-taped it into working:
+Crawling LinkedIn is a small war of attrition. Here's what went wrong — and how I duct-taped it into working:
 
-- **JavaScript Rendering:**  
-  LinkedIn loads everything dynamically, so static scraping with requests was useless.
-I switched to Selenium, which could at least *pretend* to be human.
+- **JavaScript Rendering:**
+  LinkedIn loads everything dynamically, so static HTTP scraping with `requests` was useless.
+  I switched to Selenium, which could at least *pretend* to be human.
 
-- **Rate Limiting & Bans:**  
-  Hit LinkedIn too fast and you’re done.
-  I tried clever dynamic waits with WebDriverWait, but reliability tanked — so I surrendered to long, static sleep() calls. Crude, but effective.
+- **Rate Limiting & Bans:**
+  Hit LinkedIn too fast and you're done.
+  I tried clever dynamic waits with `WebDriverWait`, but reliability tanked — so I surrendered to long, static `sleep()` calls. Crude, but effective.
 
+- **Anti-Bot Detection:**
+  To look less like a bot, I made the crawler behave more like an impatient intern — random scrolling, unpredictable pauses, and the occasional useless profile visit.
 
-- **Anti-Bot Detection:**  
-  To look less like a bot, I made the crawler behave more like an impatient intern — random scrolling, unpredictable pauses, and the occasional useless click.
-
-  It wasn’t elegant. But it survived long enough to get the data.
+  It wasn't elegant. But it survived long enough to get the data.
 
 ---
 
@@ -65,97 +74,110 @@ I switched to Selenium, which could at least *pretend* to be human.
 
 Raw results by city:
 
-- [San Francisco](/data_collected/san_francisco.json): 940
-- [São Paulo](/data_collected/sao_paulo.json): 1000
+| City          | Raw Records |
+|---------------|-------------|
+| San Francisco | 940         |
+| São Paulo     | 1000        |
 
-Of course, most of that was noise — ex-employees, recruiters, and “LinkedIn Members” with no visible name.
-So I ran a custom [data cleaning script](data_cleaning/data_cleaning.py) to refine the dataset and discard irrelevant entries.
+Most of that was noise — ex-employees, recruiters, and "LinkedIn Member" placeholders with no visible name. A custom [data cleaning script](data_cleaning/data_cleaning.py) filtered the dataset down to people actually worth emailing.
 
-The result: fewer rows, more signal, and slightly less chaos — a cleaner, sharper list of people actually worth emailing.
-
-### Cleaning Steps:
+### Cleaning Steps
 
 - Remove duplicates
 - Exclude ex-Uber employees
-- Remove profiles with the name “LinkedIn Member”
-- Filter out drivers and operations roles (e.g., Uber Eats, Uber Freight, Uber Works, Uber Air/Elevate)
+- Remove profiles with the name "LinkedIn Member"
+- Filter out drivers and non-corporate roles (Uber Eats, Uber Freight, Uber Air/Elevate)
 
 **Final cleaned counts:**
 
-| City          | My Script | Pandas |
-|---------------|-----------|--------|
-| San Francisco | 764       | 779    |
-| São Paulo     | 585       | 692    |
+| City          | Cleaned |
+|---------------|---------|
+| San Francisco | 764     |
+| São Paulo     | 585     |
 
-The discrepancy between my script and Pandas intrigued me - but that's a mystery for another day
-
-Next, I built an [email constructor](email_factory/email_factory.py) to generate two possible address formats per employee. One of them had to hit someone’s inbox.
+Next, an [email constructor](email_factory/email_factory.py) generates up to six possible email formats per employee. At least one had to hit someone's inbox.
 
 ---
 
 ## Execution Strategy
 
 Once the emails were ready, I fed them into the [email sender script](email_sender/email_sender.py).
-At that point, it should’ve been as simple as hitting “Send.”, right?!
+It should've been as simple as hitting "Send," right?
 
-Not quite yet...
+Not quite…
 
----
+### Emailing Constraints
 
-### Emailing Constraints:
+| Challenge | Detail |
+|-----------|--------|
+| Spam Filters | Identical bulk messages get flagged immediately |
+| Gmail Limits | Strict daily send caps — see [Gmail's sending limits](https://support.google.com/a/answer/166852?hl=en) |
+| Security Flags | Unusual activity triggers Google bot-detection |
 
-- **Spam Filters:** Identical bulk messages are spam-filter bait — change too little, and you’re flagged instantly.
-- **Gmail Limits:** Gmail enforces strict daily caps; see [Gmail’s sending limits](https://support.google.com/a/answer/166852?hl=en).
-- **Security Flags:** too much “unusual activity” and Google starts thinking you’re a bot — or worse, a marketer.
-
----
-
-### My Rate Limite Strategy:
+### Rate Limit Strategy
 
 - Send in **batches of 20 emails**
-- Introduce **random time delays**
+- Introduce **random time delays** between individual sends
 - Cap at **360 emails per day**
 
-This approach added just enough randomness to dodge spam filters while staying safely under Gmail’s radar.
+This added just enough randomness to dodge spam filters while staying safely under Gmail's radar.
 
 ---
 
 ## Results
 
-**Success.**  
+**Success.**
 My account was reactivated after the **first batch** of emails.
 
-## Stats:
+### Stats
 
-I expected better delivery rates, but later discovered Uber uses multiple email formats beyond the two I implemented. See this [reference](https://rocketreach.co/uber-email-format_b5ddab60f42e55aa) for more variations.
+I expected better delivery rates — but later discovered Uber uses multiple email formats beyond the two I initially implemented. See this [reference](https://rocketreach.co/uber-email-format_b5ddab60f42e55aa) for more variations.
 
 ---
 
 ## Potential Improvements
 
-This was a quick, impulsive hack that somehow evolved into a working system. If I ever revisited it, here’s how I’d make it smarter, faster, and far more sustainable:
+This was a quick, impulsive hack that somehow evolved into a working system. If I ever revisited it:
 
-* **Replace brute-force sleeps with smart waits**:
-Use explicit Selenium conditions or event hooks to make the scraper reactive instead of time-dependent.
-(“Sleep(5)” may work, but it’s the duct tape of automation.)
+- **Replace brute-force sleeps with smart waits** — use explicit Selenium conditions or event hooks instead of `sleep(5)`.
 
-* **Parallelize the crawler**:
-Run the LinkedIn scrapers for both cities simultaneously using threads or asyncio, so their data is collected in parallel instead of sequentially. Twice the speed, same chaos.
+- **Parallelize the crawler** — run both cities simultaneously with `asyncio` or threads for twice the speed.
 
-* **Add proxy rotation**:
-Implement rotating IPs, headers, and user agents to distribute requests and reduce detection risk.
+- **Add proxy rotation** — rotating IPs, headers, and user agents to distribute requests and reduce detection risk.
 
-* **Audit data cleaning logic**:
-The mismatch between my script and Pandas still bugs me. Proper unit tests or a deterministic cleaning pipeline would fix that.
+- **Audit data cleaning logic** — the mismatch between manual and Pandas counts still bugs me. Proper unit tests would resolve it.
 
 * **Introduce workflow orchestration**:
 A lightweight orchestrator like Prefect, Luigi, or Airflow would let the process recover from partial failures and make it reproducible — not just “Raff’s cursed cron job that somehow works.”
 
 ---
 
+## Setup
+
+```bash
+# 1. Install dependencies
+pip install -r requirements.txt
+
+# 2. Configure your credentials
+cp .env .env && nano .env   # fill in LinkedIn & Gmail credentials
+
+# 3. Install ChromeDriver matching your Chrome version
+#    https://chromedriver.chromium.org/
+
+# 4. Run the full pipeline
+python main.py
+
+# — or run each step independently —
+python crawler/crawler_linkedin.py
+python data_cleaning/data_cleaning.py
+python email_sender/email_sender.py
+```
+
+---
+
 ## Final Thoughts
 
-What started as a small act of stubbornness and defiance turned into a full-blown automation pipeline.
+What started as a small act of stubbornness turned into a full-blown automation pipeline.
 It was unnecessary, slightly obsessive, and definitely not the most efficient solution — but it worked.
 
 My Uber account is back and working as of 10/12/2025.

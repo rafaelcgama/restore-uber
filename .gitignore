@@ -33,7 +33,7 @@ pip-log.txt
 nosetests.xml
 
 # environment variables
-*.env
+# *.env
 
 #jupyter files
 /.ipynb_checkpoints/
