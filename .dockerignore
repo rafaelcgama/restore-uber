@@ -3,3 +3,8 @@
 venv
 Dockerfile
 README.md
+.env
+**/sent_list.json
+**/debug.log
+**/.pytest_cache
+**/__pycache__

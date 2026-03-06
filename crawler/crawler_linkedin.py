@@ -3,6 +3,7 @@ import sys
 from random import randint
 from time import sleep, time
 from unidecode import unidecode
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from selenium.webdriver.common.by import By
 from crawler import Crawler
 from utils import write_file, rename_file, create_path
@@ -256,70 +257,127 @@ class LinkedInCrawler(Crawler):
         self.logger.info('Employee data extraction: FINISHED')
         return self.all_results
 
-    def get_data(self, cities: list, companies: list, num_pages: int = None, tries: int = 0) -> list:
+    def get_data(self, cities: list, companies: list, num_pages: int = None) -> list:
         """
         Orchestrate the full data collection workflow across cities and companies.
+
+        Cities are crawled **in parallel** — one thread (and one isolated Chrome
+        process) per city — so crawling São Paulo and San Francisco now takes
+        roughly half the time compared to the previous sequential approach.
+
+        Each thread calls the module-level :func:`_crawl_city` helper which
+        creates its own :class:`LinkedInCrawler` instance, ensuring there is
+        no shared mutable state between threads.
 
         :param cities: List of city names to search.
         :param companies: List of company names to search.
         :param num_pages: Optional page cap per city/company combination.
-        :param tries: Internal retry counter.
-        :return: Nested list of employee dicts per city/company combination.
+        :return: Flat list of employee dicts with ``name`` and ``position`` keys.
         """
-        try:
-            start_time = time()
-            mydata = []
+        start_time = time()
+        all_results: list = []
 
-            # Resume mid-run if the crawler was interrupted
-            if self.page != 1:
-                self.login()
-                while self.page != 100:
-                    self.get_employees_info()
-                    self.save_data()
+        self.logger.info(
+            f'Starting parallel crawl for {len(cities)} cities '
+            f'using {len(cities)} worker threads'
+        )
 
-            for city in cities:
-                self.login()
-                # Navigate to People search
-                self.click('.//div[@id="global-nav-typeahead"]')
-                sleep(1)
-                self.click('.//li[@aria-label="Search for people"]')
-                sleep(1)
+        with ThreadPoolExecutor(max_workers=len(cities)) as executor:
+            future_to_city = {
+                executor.submit(_crawl_city, city, companies, num_pages): city
+                for city in cities
+            }
 
-                self.select_city(city)
-                self.city = city
-
-                for company in companies:
-                    self.select_company(company)
-                    self.company = company
-
-                    employee_info = self.get_employees_info(num_pages)
-                    self.save_data(final=True)
-                    mydata.append(employee_info)
-
-                    self.page = 1
-                    self.all_results = []
-                    self.driver.close()
-
+            for future in as_completed(future_to_city):
+                city = future_to_city[future]
+                try:
+                    city_results = future.result()
+                    all_results.extend(city_results)
                     elapsed = int(time() - start_time)
                     self.logger.info(
-                        f'Data collection for {city} / {company} completed in {elapsed}s'
+                        f'City "{city}" finished — '
+                        f'{len(city_results)} records collected — '
+                        f'{elapsed}s elapsed'
+                    )
+                except Exception as exc:
+                    self.logger.error(
+                        f'City "{city}" generated an exception: {exc}',
+                        exc_info=True,
                     )
 
-            return mydata
-
-        except Exception as e:
-            self.logger.error(f'Error during data collection: {e}')
-            if tries < self.MAX_TRIES:
-                tries += 1
-                self.logger.info('Retrying data collection...')
-                return self.get_data(cities, companies, num_pages, tries)
-            else:
-                self.save_data()
-                self.logger.error('Data collection failed after all retries')
+        total_elapsed = int(time() - start_time)
+        self.logger.info(
+            f'All cities complete — {len(all_results)} total records '
+            f'in {total_elapsed}s'
+        )
+        return all_results
 
 
-# ── Standalone entry point ───────────────────────────────────────────────────
-# NOTE: ChromeDriver must be installed and on PATH — https://chromedriver.chromium.org/
+# ── Module-level helper for thread parallelism ───────────────────────────────
+
+def _crawl_city(city: str, companies: list, num_pages: int = None) -> list:
+    """
+    Crawl a single city in its own isolated :class:`LinkedInCrawler` instance.
+
+    This is a **module-level** function (not a method) so it can be safely
+    passed to :class:`~concurrent.futures.ThreadPoolExecutor` without
+    pickling issues. Each call opens its own Chrome browser process.
+
+    :param city: City name to filter on LinkedIn.
+    :param companies: List of company names to filter on LinkedIn.
+    :param num_pages: Optional page cap per company.
+    :return: List of employee dicts for this city.
+    """
+    import logging
+    logger = logging.getLogger(__name__)
+    start_time = time()
+    city_results = []
+
+    crawler = LinkedInCrawler()
+    try:
+        crawler.login()
+        # Navigate to People search
+        crawler.click('.//div[@id="global-nav-typeahead"]')
+        sleep(1)
+        crawler.click('.//li[@aria-label="Search for people"]')
+        sleep(1)
+
+        crawler.select_city(city)
+        crawler.city = city
+
+        for company in companies:
+            crawler.select_company(company)
+            crawler.company = company
+
+            employee_info = crawler.get_employees_info(num_pages)
+            crawler.save_data(final=True)
+            city_results.extend(employee_info)
+
+            # Reset state for the next company within this city
+            crawler.page = 1
+            crawler.all_results = []
+
+        elapsed = int(time() - start_time)
+        logger.info(f'_crawl_city({city!r}) finished in {elapsed}s')
+
+    except Exception as exc:
+        logger.error(f'_crawl_city({city!r}) failed: {exc}', exc_info=True)
+        try:
+            crawler.save_data()
+        except Exception:
+            pass
+
+    finally:
+        try:
+            crawler.driver.quit()
+        except Exception:
+            pass
+
+    return city_results
+
+
+# ── Standalone entry point ──────────────────────────────────────────────────
+# NOTE: ChromeDriver must be installed — https://chromedriver.chromium.org/
 if __name__ == '__main__':
     start = time()
 

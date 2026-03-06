@@ -1,20 +1,69 @@
+import os
+import logging
 from time import sleep
 from random import randint
-from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
+# undetected-chromedriver patches navigator.webdriver=true so LinkedIn
+# cannot trivially detect automation via JS fingerprinting.
+import undetected_chromedriver as uc
+
+logger = logging.getLogger(__name__)
+
 
 class DriverFunctions:
 
-    def init_driver(self):
-        chrome_options = webdriver.ChromeOptions()
-        # chrome_options.add_argument('--headless')
-        chrome_options.add_argument("--start-maximized")
-        # chrome_options.add_argument('--no-sandbox')
-        driver = webdriver.Chrome(options=chrome_options)
+    def init_driver(self, proxy: str = None, user_agent: str = None):
+        """
+        Initialise and return an undetected Chrome WebDriver instance.
+
+        **Chrome binary resolution (highest to lowest priority):**
+
+        1. ``CHROME_BINARY`` env var — absolute path to a specific Chrome binary.
+           Ideal for pointing at a pinned `Chrome for Testing
+           <https://googlechromelabs.github.io/chrome-for-testing/>`_ build,
+           which avoids conflicts with the user's installed Chrome and gives
+           reproducible, version-locked behaviour.
+        2. Auto-detection — ``undetected-chromedriver`` locates the system Chrome
+           automatically if ``CHROME_BINARY`` is not set.
+
+        :param proxy: Optional proxy address (e.g. ``'http://1.2.3.4:8080'``).
+        :param user_agent: Optional User-Agent override string.
+        :return: A ready :class:`uc.Chrome` driver instance.
+        """
+        chrome_options = uc.ChromeOptions()
+        chrome_options.add_argument('--start-maximized')
+        # Required when running inside Docker or headless Linux environments
+        chrome_options.add_argument('--no-sandbox')
+        chrome_options.add_argument('--disable-dev-shm-usage')
+
+        if user_agent:
+            chrome_options.add_argument(f'user-agent={user_agent}')
+            logger.debug(f'User-Agent: {user_agent[:60]}...')
+
+        if proxy:
+            chrome_options.add_argument(f'--proxy-server={proxy}')
+            logger.info(f'Proxy: {proxy}')
+
+        # Resolve Chrome binary — prefer Chrome for Testing if configured
+        chrome_binary = os.getenv('CHROME_BINARY')
+        if chrome_binary:
+            if not os.path.isfile(chrome_binary):
+                logger.warning(
+                    f'CHROME_BINARY path does not exist: {chrome_binary!r}. '
+                    'Falling back to system Chrome.'
+                )
+                chrome_binary = None
+            else:
+                logger.info(f'Using Chrome binary: {chrome_binary}')
+
+        driver = uc.Chrome(
+            options=chrome_options,
+            browser_executable_path=chrome_binary,  # None → auto-detect system Chrome
+        )
         self.driver_ready(driver)
         return driver
 
