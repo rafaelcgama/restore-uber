@@ -7,8 +7,6 @@ from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
-# undetected-chromedriver patches navigator.webdriver=true so LinkedIn
-# cannot trivially detect automation via JS fingerprinting.
 import undetected_chromedriver as uc
 
 logger = logging.getLogger(__name__)
@@ -60,9 +58,19 @@ class DriverFunctions:
             else:
                 logger.info(f'Using Chrome binary: {chrome_binary}')
 
+        # Persist Chrome session between runs so LinkedIn only asks for
+        # email verification once. Set CHROME_PROFILE_DIR in .env to an
+        # absolute path on disk (e.g. /Users/you/.chrome_linkedin_profile).
+        profile_dir = os.getenv('CHROME_PROFILE_DIR')
+        if profile_dir:
+            os.makedirs(profile_dir, exist_ok=True)
+            chrome_options.add_argument(f'--user-data-dir={profile_dir}')
+            logger.info(f'Using persistent Chrome profile: {profile_dir}')
+
         driver = uc.Chrome(
             options=chrome_options,
             browser_executable_path=chrome_binary,  # None → auto-detect system Chrome
+            version_main=141 if chrome_binary and '141' in chrome_binary else None
         )
         self.driver_ready(driver)
         return driver

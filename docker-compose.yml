@@ -1,0 +1,11 @@
+services:
+  crawler:
+    build: .
+    container_name: restore-uber-crawler
+    env_file:
+      - .env
+    volumes:
+      - ./data_raw:/usr/src/app/data_raw
+      - ./data_cleaned:/usr/src/app/data_cleaned
+      - ./logs:/usr/src/app/logs
+    restart: "no"

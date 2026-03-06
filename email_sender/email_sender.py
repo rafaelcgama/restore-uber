@@ -1,18 +1,16 @@
 import os
-import logging
 import smtplib
+import logging
 from time import sleep
 from string import Template
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
+
 from email_factory import EmailFactory
 from utils import open_file, write_file, get_folder_files
 
-MY_USERNAME = os.getenv('USERNAME_EMAIL')
-PASSWORD = os.getenv('PASSWORD_EMAIL')
-time_gap = int(os.getenv('DELAY', 900))
-batch_size = int(os.getenv('BATCH_SIZE', 20))
-max_emails = int(os.getenv('EMAIL_TARGET', 360))
+logger = logging.getLogger(__name__)
+
 
 
 class EmailSender:
@@ -24,15 +22,6 @@ class EmailSender:
     """
 
     def __init__(self):
-        self.MAX_TRIES = 5
-        self.logger = logging.getLogger(__name__)
-        logging.basicConfig(
-            format='[%(asctime)s] {%(filename)s:%(lineno)d} %(levelname)s: %(message)s',
-            datefmt='%d/%m/%Y %I:%M:%S %p',
-            level=logging.INFO,
-        )
-        fh = logging.FileHandler('debug.log')
-        self.logger.addHandler(fh)
         self.sent_list = []
 
     @staticmethod
@@ -49,10 +38,10 @@ class EmailSender:
 
     def log_in(self) -> smtplib.SMTP:
         """Connect and authenticate to Gmail's SMTP server."""
-        self.logger.info('Connecting to email server and logging in')
+        logger.info('Connecting to email server and logging in')
         server = smtplib.SMTP(host='smtp.gmail.com', port=587)
         server.starttls()
-        server.login(MY_USERNAME, PASSWORD)
+        server.login(os.getenv('USERNAME_EMAIL'), os.getenv('PASSWORD_EMAIL'))
         return server
 
     def send_email(self, email_list: list):
@@ -81,21 +70,20 @@ class EmailSender:
                 if email in self.sent_list:
                     continue
 
-                if email_count > 0 and email_count % batch_size == 0:
-                    # Pause between batches to avoid spam detection
-                    self.logger.info(
-                        f'Batch {batch_count} done. Waiting {time_gap // 60}m before next batch.'
+                if email_count > 0 and email_count % int(os.getenv('BATCH_SIZE', 20)) == 0:
+                    logger.info(
+                        f'Batch {batch_count} done. Waiting {int(os.getenv("DELAY", 900)) // 60}m before next batch.'
                     )
                     server.quit()
                     batch_count += 1
-                    sleep(time_gap)
+                    sleep(int(os.getenv('DELAY', 900)))
                     server = self.log_in()
 
-                self.logger.info(f'Sending email {email_count + 1} (batch {batch_count}): {email}')
+                logger.info(f'Sending email {email_count + 1} (batch {batch_count}): {email}')
 
                 msg = MIMEMultipart()
                 message = message_template.substitute(PERSON_NAME=name.title())
-                msg['From'] = MY_USERNAME
+                msg['From'] = os.getenv('USERNAME_EMAIL')
                 msg['To'] = email
                 msg['Subject'] = 'Please help me restore my account'
                 msg.attach(MIMEText(message, 'plain'))
@@ -106,23 +94,15 @@ class EmailSender:
                 self.sent_list.append(email)
                 email_count += 1
 
-                self.logger.info(f'Email {email_count} sent successfully')
+                logger.info(f'Email {email_count} sent successfully')
                 sleep(5)
 
-                if email_count >= max_emails:
-                    self.logger.info('Daily email target reached.')
+                if email_count >= int(os.getenv('EMAIL_TARGET', 360)):
+                    logger.info('Daily email target reached.')
                     write_file(self.sent_list, 'sent_list.json')
                     server.quit()
                     return
 
-        self.logger.info('All emails processed. Closing connection.')
+        logger.info('All emails processed. Closing connection.')
         write_file(self.sent_list, 'sent_list.json')
         server.quit()
-
-
-if __name__ == '__main__':
-    file_list = get_folder_files('../data_cleaned', ['json'])
-    for file in file_list:
-        email_list = open_file(file)
-        sender = EmailSender()
-        sender.send_email(email_list)

@@ -1,6 +1,6 @@
 # Operation Restore Uber Account
 
-![Python](https://img.shields.io/badge/Python-3.11+-3776AB?logo=python&logoColor=white)
+![Python](https://img.shields.io/badge/Python-3.13-3776AB?logo=python&logoColor=white)
 ![Selenium](https://img.shields.io/badge/Selenium-4.18-43B02A?logo=selenium&logoColor=white)
 ![Prefect](https://img.shields.io/badge/Prefect-3.6-024DFD?logo=prefect&logoColor=white)
 ![Tests](https://img.shields.io/badge/Tests-103%20passing-brightgreen?logo=pytest&logoColor=white)
@@ -108,7 +108,7 @@ LinkedIn is actively hostile to automation. Three layers of countermeasures are 
 ### Anti-Bot Detection
 - **`undetected-chromedriver`** — patches `navigator.webdriver = true` at the browser level, bypassing LinkedIn's JS fingerprinting
 - **User-Agent rotation** — every session gets a randomised, realistic Chrome UA via `fake-useragent`
-- **Proxy rotation** — proxies are fetched automatically from the [ProxyScrape](https://proxyscrape.com) free API on startup. Override with a private pool via `PROXY_LIST`, or swap the source entirely via `PROXY_SOURCE_URL`
+- **Proxy rotation** — disabled by default (`DISABLE_PROXY=true`) so local runs work cleanly from a residential IP. When running at scale from a cloud/datacenter IP, point `PROXY_LIST` at a paid service (Bright Data, Oxylabs, etc.) — the `ProxyRotator` will handle round-robin rotation automatically.
 - **Human-like behaviour** — random scrolling, unpredictable pauses, and occasional profile visits
 
 ### Rate Limiting
@@ -118,32 +118,32 @@ LinkedIn is actively hostile to automation. Three layers of countermeasures are 
 
 ---
 
-## Improvements Made (**March 6th, 2026**)
+## 2026 Revisit
 
-This project evolved from a one-off hack into a production-grade pipeline. Here's what was added:
+When I finished this project in 2020 I noted several improvements I'd make if I were to do it again — proper orchestration, parallel crawling, containerisation, a test suite, cleaner logging. I never went back to it.
 
-### ⚡ Parallel Crawling
-Both cities now run simultaneously using `ThreadPoolExecutor` — each in its own isolated Chrome process with no shared state. The city-level `_crawl_city()` function is designed to fail independently: if one city errors out, the other's results are still preserved.
+In March 2026 I used this repo as a hands-on exercise to learn **LLM agent-assisted development** (using Google DeepMind's Antigravity agent with Claude Sonnet 4.5 and Gemini 3 Pro). Rather than building something new, I applied those deferred improvements to a codebase I already understood well, which let me focus entirely on the tooling and workflow rather than the problem domain.
 
-### 🛡️ Anti-Detection Stack
-Three-layer evasion built into the base crawler via `ProxyRotator` — automatically applied to every session without changes to crawling logic.
+**What was added:**
 
-### 🎛️ Prefect Orchestration
-The full pipeline is now a proper Prefect workflow (`pipeline/flow.py`):
-- Each stage (`crawl → clean → send`) is an independent `@task` with automatic retries
-- Crawl failures retry up to 3× before propagating — clean and send are never re-run unnecessarily
-- Replaces the cron job: `pipeline.serve(cron="0 6 * * *")`
-- Optional dashboard: `prefect server start` → http://localhost:4200
+- **Prefect orchestration** — `crawl → clean → send` as independent retried `@task`s with a shared `@flow`, replacing the original cron job
+- **Parallel crawling** — both cities run simultaneously via `ThreadPoolExecutor`, each in an isolated Chrome process
+- **Proxy rotation infrastructure** — `ProxyRotator` with round-robin rotation, User-Agent randomisation, and a `DISABLE_PROXY` toggle for local runs
+- **Docker + Docker Compose** — reproducible environment with `.env`-based secret injection
+- **103 unit tests** across 5 modules, all offline (no browser, no network)
+- **Logging and configuration standardisation** — single `setup_logging()` entry point, module-level `getLogger(__name__)` throughout, centralised `.env` loading
 
-### 🧪 Test Suite
-103 unit tests across 5 modules — all run offline, no browser or network required. See [`docs/e2e_testing.md`](docs/e2e_testing.md) for end-to-end testing strategies.
+**Why the crawler no longer runs:**
+LinkedIn's search interface changed fundamentally after 2020. Company employees are now accessed via `/company/{name}/people/` with location filters and infinite scroll — a completely different interaction model from the paginated global People search the crawler was built against. Re-implementing the data collection layer (`_crawl_city()`) would have been a full rewrite with no additional learning value for this exercise, so it was left as-is. The pipeline, orchestration, data cleaning, email factory, and sending layers are all functional and unaffected.
+
+The crawler is a snapshot of how LinkedIn worked in 2020. Everything around it reflects how I'd build it today.
 
 ---
 
 ## Setup
 
 ```bash
-# 1. Install dependencies
+# 1. Install dependencies (requires Python 3.13)
 pip install -r requirements.txt
 
 # 2. Configure credentials
@@ -151,6 +151,9 @@ cp .env.example .env && nano .env
 
 # 3. Run the full Prefect-orchestrated pipeline
 python main.py
+
+# — or use Docker Compose (Best Practice) —
+docker-compose up --build
 
 # — or run each stage individually —
 python crawler/crawler_linkedin.py
@@ -171,12 +174,15 @@ python -m pipeline.flow
 | `PASSWORD_LINKEDIN` | ✅ | LinkedIn password |
 | `USERNAME_EMAIL` | ✅ | Gmail address for sending |
 | `PASSWORD_EMAIL` | ✅ | Gmail App Password |
-| `DELAY` | ✗ | Seconds between email batches (default: 900) |
-| `BATCH_SIZE` | ✗ | Emails per batch (default: 20) |
-| `EMAIL_TARGET` | ✗ | Max emails per run (default: 360) |
-| `PROXY_LIST` | ✗ | Comma-separated private proxies — overrides the free API pool |
-| `PROXY_SOURCE_URL` | ✗ | Free proxy API URL (default: ProxyScrape elite HTTP proxies) |
+| `DELAY` | ✗ | Seconds between email batches (default: `900`) |
+| `BATCH_SIZE` | ✗ | Emails per batch (default: `20`) |
+| `EMAIL_TARGET` | ✗ | Max emails per run (default: `360`) |
+| `DISABLE_PROXY` | ✗ | Set `true` to skip all proxy logic (default). Set `false` + add `PROXY_LIST` for paid proxies. |
+| `PROXY_LIST` | ✗ | Comma-separated proxies from a paid service (e.g. `http://user:pass@host:port`). Requires `DISABLE_PROXY=false`. |
 | `CHROME_BINARY` | ✗ | Path to a [Chrome for Testing](https://googlechromelabs.github.io/chrome-for-testing/) binary |
+| `CHROME_PROFILE_DIR` | ✗ | Directory for a persistent Chrome profile. Set once, complete LinkedIn's email verification manually — all future runs reuse the saved session. **Local only** (see note below). |
+
+> **LinkedIn session verification:** On a fresh Chrome session LinkedIn may send a 6-digit code to your email before allowing login. Setting `CHROME_PROFILE_DIR` saves the session cookie to disk so this only happens once. This workaround is **local-only** — Docker containers are ephemeral and have no GUI for the initial manual step, making fully automated verification impractical without additional IMAP integration.
 
 ### Running Tests
 
@@ -193,7 +199,7 @@ pytest tests/ -v --cov=. --cov-report=term-missing
 pytest tests/e2e/ -m e2e -v
 ```
 
-For end-to-end testing strategies (sandboxed LinkedIn account, mock SMTP, Prefect flow integration), see [`docs/e2e_testing.md`](docs/e2e_testing.md).
+For end-to-end testing strategies and current limitations, see [`docs/e2e_testing.md`](docs/e2e_testing.md).
 
 ---
 
@@ -220,7 +226,7 @@ restore-uber/
 ├── utils/
 │   ├── __init__.py
 │   ├── driver_functions.py       # undetected-chromedriver helpers + CHROME_BINARY support
-│   ├── proxy_rotator.py          # Proxy + User-Agent rotation (free API or PROXY_LIST)
+│   ├── proxy_rotator.py          # Proxy + User-Agent rotation (opt-in via PROXY_LIST)
 │   └── utils.py                  # File I/O, logging, path helpers
 ├── tests/
 │   ├── __init__.py

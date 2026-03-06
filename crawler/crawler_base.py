@@ -1,6 +1,8 @@
 import abc
-from utils.utils import start_logger
+import logging
 from utils import DriverFunctions, ProxyRotator
+
+logger = logging.getLogger(__name__)
 
 
 class Crawler(DriverFunctions):
@@ -20,7 +22,6 @@ class Crawler(DriverFunctions):
             proxy=self._rotator.get_next(),
             user_agent=self._rotator.get_random_user_agent(),
         )
-        self.logger = start_logger(__name__)
 
     def login(self):
         pass

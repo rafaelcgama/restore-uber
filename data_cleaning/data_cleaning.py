@@ -23,6 +23,7 @@ class Conditions:
         :param position: Raw position string scraped from LinkedIn.
         :return: True if the employee should be kept, False otherwise.
         """
+
         def is_former(position):
             return 'uber' not in normalize_string(position) or 'ex-uber' in normalize_string(position)
 
@@ -34,9 +35,9 @@ class Conditions:
             return any(kw in norm for kw in ('uber air', 'uberair', 'freight', 'elevate'))
 
         passed = (
-            not is_former(position)
-            and not is_driver(position)
-            and not is_another_service(position)
+                not is_former(position)
+                and not is_driver(position)
+                and not is_another_service(position)
         )
 
         if not passed:
@@ -81,19 +82,3 @@ def clean_data(mylist: list) -> list:
         f'{condition_fail_count} non-relevant positions)'
     )
     return new_list
-
-
-if __name__ == '__main__':
-    from utils.utils import start_logger
-    start_logger(__name__)
-
-    file_list = get_folder_files('../data_raw', ['json'])
-    logger.info(f'Found {len(file_list)} raw file(s) to clean')
-
-    for file in file_list:
-        filepath = create_path(filename=file, folder='../data_cleaned')
-        results = open_file(filepath)
-        file_data = clean_data(results)
-        new_filepath = filepath.replace('raw', 'clean')
-        write_file(file_data, new_filepath)
-        logger.info(f'Cleaning complete: {file} → {new_filepath}')

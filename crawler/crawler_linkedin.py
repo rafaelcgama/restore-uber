@@ -1,15 +1,18 @@
 import os
 import sys
+import logging
 from random import randint
 from time import sleep, time
 from unidecode import unidecode
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from selenium.webdriver.common.by import By
-from crawler import Crawler
-from utils import write_file, rename_file, create_path
 
-MY_USERNAME = os.getenv('USERNAME_LINKEDIN')
-PASSWORD = os.getenv('PASSWORD_LINKEDIN')
+from crawler import Crawler
+from utils import setup_logging, write_file, rename_file, create_path
+
+logger = logging.getLogger(__name__)
+
+
 
 
 class LinkedInCrawler(Crawler):
@@ -25,7 +28,7 @@ class LinkedInCrawler(Crawler):
         self.all_results = []
         self.page = 1
         self.url_page_result = ''
-        self.preffix = ''
+        self.prefix = ''
         self.city = ''
         self.company = ''
         self.last_page = ''
@@ -64,23 +67,23 @@ class LinkedInCrawler(Crawler):
         :raises Exception: After MAX_TRIES consecutive failures.
         """
         try:
-            self.logger.info(f'Attempting to login to {self.url_login}')
+            logger.info(f'Attempting to login to {self.url_login}')
             self.driver.get(self.url_login)
             sleep(3)
 
             self.driver.find_element(By.XPATH, './/input[@id="username"]').clear()
-            self.driver.find_element(By.XPATH, './/input[@id="username"]').send_keys(MY_USERNAME)
+            self.driver.find_element(By.XPATH, './/input[@id="username"]').send_keys(os.getenv('USERNAME_LINKEDIN'))
             self.driver.find_element(By.XPATH, './/input[@id="password"]').clear()
-            self.driver.find_element(By.XPATH, './/input[@id="password"]').send_keys(PASSWORD)
+            self.driver.find_element(By.XPATH, './/input[@id="password"]').send_keys(os.getenv('PASSWORD_LINKEDIN'))
             self.driver.find_element(By.XPATH, './/button[@type="submit"]').click()
             sleep(2)
-            self.logger.info('Login successful')
+            logger.info('Login successful')
 
         except Exception as e:
-            self.logger.error('Login attempt failed', exc_info=True)
+            logger.error('Login attempt failed', exc_info=True)
             if tries < self.MAX_TRIES:
                 tries += 1
-                self.logger.info('Retrying login...')
+                logger.info('Retrying login...')
                 return self.login(tries)
             raise Exception(f'Failed to login after {self.MAX_TRIES} attempts: {e}')
 
@@ -102,13 +105,13 @@ class LinkedInCrawler(Crawler):
 
         if not len(old_filepath):
             write_file(data, new_filepath)
-            self.logger.info(f'First file created — page {self.page}')
+            logger.info(f'First file created — page {self.page}')
         elif final:
             final_pathname = create_path(filename=filename, folder='../data_raw', final=True)
             rename_file(data, old_filepath, final_pathname)
         else:
             rename_file(data, old_filepath, new_filepath)
-            self.logger.info(f'File updated — page {self.page}')
+            logger.info(f'File updated — page {self.page}')
 
         self.last_saved_file = new_filepath
 
@@ -118,7 +121,7 @@ class LinkedInCrawler(Crawler):
 
         :param city: Name of the city to filter by.
         """
-        self.logger.info('City selection: STARTED')
+        logger.info('City selection: STARTED')
 
         self.wait_for_element(self.xpaths['location']['filter'])
         self.click(self.xpaths['location']['filter'])
@@ -133,8 +136,8 @@ class LinkedInCrawler(Crawler):
         self.click(self.xpaths['location']['apply_button'])
         sleep(randint(1, 2))
 
-        self.logger.info(f'City selected: {city}')
-        self.logger.info('City selection: FINISHED')
+        logger.info(f'City selected: {city}')
+        logger.info('City selection: FINISHED')
 
     def select_company(self, company: str):
         """
@@ -142,7 +145,7 @@ class LinkedInCrawler(Crawler):
 
         :param company: Name of the company to filter by.
         """
-        self.logger.info('Company selection: STARTED')
+        logger.info('Company selection: STARTED')
 
         self.click(self.xpaths['company']['filter'])
         self.insert_text(self.xpaths['company']['input_box'], company)
@@ -153,8 +156,8 @@ class LinkedInCrawler(Crawler):
         self.click(self.xpaths['company']['apply_button'])
         sleep(randint(1, 2))
 
-        self.logger.info(f'Company selected: {company}')
-        self.logger.info('Company selection: FINISHED')
+        logger.info(f'Company selected: {company}')
+        logger.info('Company selection: FINISHED')
 
     def click_random_profiles(self, employee_combox: list):
         """
@@ -195,11 +198,11 @@ class LinkedInCrawler(Crawler):
         :param tries: Number of extraction attempts already made.
         """
         try:
-            self.logger.info(f'Extracting page {page}: STARTED')
-            if not len(self.preffix):
-                self.preffix = self.driver.current_url
+            logger.info(f'Extracting page {page}: STARTED')
+            if not len(self.prefix):
+                self.prefix = self.driver.current_url
             else:
-                self.url_page_result = self.preffix + f'&page={page}'
+                self.url_page_result = self.prefix + f'&page={page}'
                 self.driver.get(self.url_page_result)
                 sleep(randint(6, 10))
 
@@ -216,19 +219,19 @@ class LinkedInCrawler(Crawler):
                 })
 
             self.random_actions(results_combox)
-            self.logger.info(f'Extracting page {page}: COMPLETED')
+            logger.info(f'Extracting page {page}: COMPLETED')
 
         except Exception as e:
-            self.logger.info(f'Failure to collect employee info from page {page}: {e}')
+            logger.info(f'Failure to collect employee info from page {page}: {e}')
             if tries < self.MAX_TRIES:
                 tries += 1
                 if self.find_multiple_elements('.//*[contains(text(), "Search limit reached")]'):
                     self.save_data()
                     sys.exit('LinkedIn rate-limited the crawler. Try again later.')
-                self.logger.info(f'Retrying page {page}...')
+                logger.info(f'Retrying page {page}...')
                 return self.extract_page(page, tries)
             else:
-                self.logger.error(f'Failed to extract page {page} after {self.MAX_TRIES} attempts')
+                logger.error(f'Failed to extract page {page} after {self.MAX_TRIES} attempts')
 
     def get_employees_info(self, num_pages: int = None) -> list:
         """
@@ -237,7 +240,7 @@ class LinkedInCrawler(Crawler):
         :param num_pages: Optional cap on the number of pages to scrape.
         :return: List of dicts with ``name`` and ``position`` keys.
         """
-        self.logger.info('Employee data extraction: STARTED')
+        logger.info('Employee data extraction: STARTED')
 
         if self.page == 1:
             sleep(randint(2, 3))
@@ -252,12 +255,12 @@ class LinkedInCrawler(Crawler):
         for page in range(self.page, int(self.last_page) + 1):
             self.page = page
             self.extract_page(page)
-
         self.save_data()
-        self.logger.info('Employee data extraction: FINISHED')
+        logger.info('Employee data extraction: FINISHED')
         return self.all_results
 
-    def get_data(self, cities: list, companies: list, num_pages: int = None) -> list:
+    @staticmethod
+    def get_data(cities: list, companies: list, num_pages: int = None) -> list:
         """
         Orchestrate the full data collection workflow across cities and companies.
 
@@ -277,7 +280,7 @@ class LinkedInCrawler(Crawler):
         start_time = time()
         all_results: list = []
 
-        self.logger.info(
+        logger.info(
             f'Starting parallel crawl for {len(cities)} cities '
             f'using {len(cities)} worker threads'
         )
@@ -294,19 +297,19 @@ class LinkedInCrawler(Crawler):
                     city_results = future.result()
                     all_results.extend(city_results)
                     elapsed = int(time() - start_time)
-                    self.logger.info(
+                    logger.info(
                         f'City "{city}" finished — '
                         f'{len(city_results)} records collected — '
                         f'{elapsed}s elapsed'
                     )
                 except Exception as exc:
-                    self.logger.error(
+                    logger.error(
                         f'City "{city}" generated an exception: {exc}',
                         exc_info=True,
                     )
 
         total_elapsed = int(time() - start_time)
-        self.logger.info(
+        logger.info(
             f'All cities complete — {len(all_results)} total records '
             f'in {total_elapsed}s'
         )
@@ -328,8 +331,6 @@ def _crawl_city(city: str, companies: list, num_pages: int = None) -> list:
     :param num_pages: Optional page cap per company.
     :return: List of employee dicts for this city.
     """
-    import logging
-    logger = logging.getLogger(__name__)
     start_time = time()
     city_results = []
 
@@ -379,11 +380,12 @@ def _crawl_city(city: str, companies: list, num_pages: int = None) -> list:
 # ── Standalone entry point ──────────────────────────────────────────────────
 # NOTE: ChromeDriver must be installed — https://chromedriver.chromium.org/
 if __name__ == '__main__':
+    setup_logging()
     start = time()
 
     cities = ['São Paulo', 'San Francisco']
-    company = ['Uber']
-    crawler = LinkedInCrawler()
-    data = crawler.get_data(cities, company)
+    companies = ['Uber']
+    data = LinkedInCrawler.get_data(cities, companies)
 
-    crawler.logger.info('Data collection complete for all cities and companies')
+    elapsed = int(time() - start)
+    logger.info(f'Data collection complete for all cities and companies in {elapsed}s')

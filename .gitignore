@@ -23,9 +23,12 @@ lib
 lib64
 venv
 /venv/*
+.venv/
 
-# Installer logs
+# Logs
 pip-log.txt
+*.log
+debug.log
 
 # Unit test / coverage reports
 .coverage
@@ -41,8 +44,7 @@ nosetests.xml
 
 #json
 #*.json
-/tests/
-/email_sender/debug.log
+
 /email_sender/sent_list.json
 /notebooks/test.ipynb
 /email_sender/get_emails.py

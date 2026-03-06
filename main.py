@@ -14,13 +14,17 @@ To start the Prefect dashboard:
     prefect server start  →  http://localhost:4200
 """
 
-import logging
 import time
+from utils import setup_logging
 
-from utils.utils import start_logger
+# IMPORTANT: setup_logging() calls load_dotenv() internally.
+# It MUST run before any other project import, because crawler_linkedin.py
+# and email_sender.py read os.getenv() at module level (line 15, 13 etc.).
+# Python executes module-level code at import time — if load_dotenv() hasn't
+# fired yet, every os.getenv() call returns None.
+logger = setup_logging()
+
 from pipeline.flow import pipeline
-
-logger = start_logger(__name__)
 
 
 if __name__ == '__main__':

@@ -14,11 +14,11 @@ Schedule via Prefect (replaces cron):
 import logging
 
 from prefect import flow, task
-from prefect.tasks import task_input_hash
 
 from crawler import LinkedInCrawler
 from data_cleaning import clean_data
 from email_sender import EmailSender
+from utils import setup_logging
 
 logger = logging.getLogger(__name__)
 
@@ -45,8 +45,7 @@ def crawl_task(cities: list[str], companies: list[str], num_pages: int | None = 
     :return: Flat list of employee dicts with ``name`` and ``position`` keys.
     """
     logger.info(f'Starting crawl for cities={cities}, companies={companies}')
-    crawler = LinkedInCrawler()
-    raw_data = crawler.get_data(cities, companies, num_pages=num_pages)
+    raw_data = LinkedInCrawler.get_data(cities, companies, num_pages=num_pages)
     logger.info(f'Crawl complete — {len(raw_data)} raw records collected')
     return raw_data
 
@@ -91,16 +90,16 @@ def send_task(cleaned_data: list) -> None:
     name="restore-uber-pipeline",
     log_prints=True,
     description=(
-        "End-to-end pipeline: crawl LinkedIn → clean data → send emails.\n"
-        "Each stage is independently retried on failure. State is persisted "
-        "in Prefect's local SQLite backend so partial-failure runs can be "
-        "resumed without re-running successful tasks."
+            "End-to-end pipeline: crawl LinkedIn → clean data → send emails.\n"
+            "Each stage is independently retried on failure. State is persisted "
+            "in Prefect's local SQLite backend so partial-failure runs can be "
+            "resumed without re-running successful tasks."
     ),
 )
 def pipeline(
-    cities: list[str] = None,
-    companies: list[str] = None,
-    num_pages: int | None = None,
+        cities: list[str] | None = None,
+        companies: list[str] | None = None,
+        num_pages: int | None = None,
 ) -> None:
     """
     Orchestrate the full workflow.
@@ -122,9 +121,5 @@ def pipeline(
 # ── Entry point ───────────────────────────────────────────────────────────────
 
 if __name__ == '__main__':
-    # Run once immediately:
-    #   python -m pipeline.flow
-    #
-    # To schedule with Prefect instead of a cron job, swap `pipeline()` for:
-    #   pipeline.serve(name="daily-run", cron="0 6 * * *")
+    setup_logging()
     pipeline()
